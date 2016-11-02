@@ -232,4 +232,5 @@ publishNotice(noticeWelcome, settedlang);
 deathTollCheck(10);
 
 //discount time counter - needs to have passed PLAYTIME in seconds from last round stats (like in stats32.js:380) and total LIMIT in seconds, after which bannerwill be shown
+//discountBannerTimer(seconds, limit);
 discountBannerTimer(200, 3600);
