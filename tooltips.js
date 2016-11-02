@@ -136,18 +136,7 @@ function showNotice(message, duration){
 
 /*===============NOTICES===============*/
 
-// rules introduction
-var noticeWelcome = {
-    callback: function(){
-        createCookie(this.cookieName, 'done');
-    },
-    cookieName: 'noticeWelcome',
-    duration: null,
-    message: {
-        ru: '<p>Пока тебя не сожрали, запомни простое управление:</p> <p><strong>W</strong> - стрелять </p> <p><strong>ПРОБЕЛ</strong> - разделиться</p>'
-    }
-};
-
+// invitation to go play some other server after numerous deaths
 var noticeDeathSuggestion = {
     callback: function(){
         //createCookie(this.cookieName, 'done');  //uncomment this if this notice needs to be ran only once per user
@@ -160,6 +149,7 @@ var noticeDeathSuggestion = {
     }
 };
 
+// discount banner after a certain amount of game time
 var noticeDiscountBanner = {
     callback:  function(){
         createCookie(this.cookieName, 'done');
@@ -171,6 +161,29 @@ var noticeDiscountBanner = {
     }
 };
 
+// help button reminder
+var noticeHelpButtonReminder = {
+    callback: function(){
+        createCookie(this.cookieName, 'done');
+    },
+    cookieName: 'helpButtonReminder',
+    duration: 14000,
+    message: {
+        ru: '<p>Остались вопросы? Жми сюда!</p>'
+    }
+};
+
+// rules introduction
+var noticeWelcome = {
+    callback: function(){
+        createCookie(this.cookieName, 'done');
+    },
+    cookieName: 'noticeWelcome',
+    duration: null,
+    message: {
+        ru: '<p>Пока тебя не сожрали, запомни простое управление:</p> <p><strong>W</strong> - стрелять </p> <p><strong>ПРОБЕЛ</strong> - разделиться</p>'
+    }
+};
 
 /*===============MAIN FUNCTIONS===============*/
 
