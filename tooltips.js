@@ -206,10 +206,6 @@ function noticeInitSequence(){
         // inject css
         addStyles(styles);
 
-
-        // check/set tutorialStartTime cookie
-
-
         // listen for clicks outside of notice to hide it
         closeNoticeOnOutsideClick();
     }
