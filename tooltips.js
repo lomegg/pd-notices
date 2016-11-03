@@ -1,14 +1,14 @@
 /*===============STYLES===============*/
 
 /* virtual stylesheet due to restricted access to the server. Could be (and should be) transfered to proper css files */
-var styles =    '.special-notice   {position: fixed; top: 20px; left: 50%; transform: translate(-50%, 0px); display: none; text-align: center;  z-index: 999999;}' +
-                '.special-notice div {position: relative;display: block;min-width: 400px;box-shadow: rgb(105, 105, 105) 0px -1px 14px -3px inset;font-size: 16px;margin: 0px 0px 10px;padding: 20px 30px 10px;border: 4px solid #35a7ff;border-image: initial;border-radius: 15px;background: rgb(238, 255, 239);}' +
-    '.special-notice img {position: absolute; right: 28px; top: 25px; height: 20px; opacity: 0.6; -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;float:right;margin-top:-23px;margin-right:-25px;}' +
-    '.special-notice img:hover{opacity: 0.9;}' +
+var styles =    '.special-notice   {position: fixed; top: 20px; left: 50%; -webkit-transform: translate(-50%, 0px); transform: translate(-50%, 0px); display: none; text-align: center;  z-index: 999999;}' +
+    '.special-notice div {position: relative;display: block;min-width: 400px;box-shadow: rgb(105, 105, 105) 0px -1px 14px -3px inset;font-size: 16px;margin: 0px 0px 10px;padding: 20px 30px 10px;border: 4px solid #35a7ff;-o-border-image: initial;border-image: initial;border-radius: 15px;background: rgb(238, 255, 239);}' +
+    '.special-notice img {position: absolute; right: 28px; top: 25px; height: 20px; opacity: 0.6; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)"; -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;float:right;margin-top:-23px;margin-right:-25px;}' +
+    '.special-notice img:hover{opacity: 0.9;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";}' +
     '.special-notice p{font-size: 18px; margin: 0 0 5px 0;}' +
     '.special-notice a{cursor: pointer;}' +
-    '.special-notice.right {left: auto; right: 60px; top: 5px; transform: none;}' +
-    '.special-notice.right::before, .special-notice.right::after { content: ""; position: absolute; top: 15px; right: -20px; border: 10px solid transparent; border-left: 10px solid #35a7ff;}';
+    '.special-notice.right {left: auto; right: 60px; top: 5px; -webkit-transform: none; transform: none;}' +
+    '.special-notice.right:before, .special-notice.right:after { content: ""; position: absolute; top: 15px; right: -20px; border: 10px solid transparent; border-left: 10px solid #35a7ff;}';
 
 /* add style block with content to the header */
 function addStyles(css){
