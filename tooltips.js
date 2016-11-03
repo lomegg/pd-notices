@@ -243,12 +243,14 @@ function discountBannerTimer(seconds, limit){
 
 // introduction message followed by help button reminder
 function introductionMessage(){
-    publishNotice(noticeWelcome, settedlang);
+    if (!userIsLoggedIn()){
+        publishNotice(noticeWelcome, settedlang);
 
-    // when introduction is closed, show help button reminder
-    $( document ).one( "noticeClose", function() {
-        publishNotice(noticeHelpButtonReminder, settedlang);
-    });
+        // when introduction is closed, show help button reminder
+        $( document ).one( "noticeClose", function() {
+            publishNotice(noticeHelpButtonReminder, settedlang);
+        });
+    }
 }
 
 
