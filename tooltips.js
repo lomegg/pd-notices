@@ -1,12 +1,14 @@
 /*===============STYLES===============*/
 
-/* virtual stylesheet */
+/* virtual stylesheet due to restricted access to the server. Could be (and should be) transfered to proper css files */
 var styles =    '.special-notice   {position: fixed; top: 20px; left: 50%; transform: translate(-50%, 0px); display: none; text-align: center;  z-index: 999999;}' +
                 '.special-notice div {position: relative;display: block;min-width: 400px;box-shadow: rgb(105, 105, 105) 0px -1px 14px -3px inset;font-size: 16px;margin: 0px 0px 10px;padding: 20px 30px 10px;border: 4px solid #35a7ff;border-image: initial;border-radius: 15px;background: rgb(238, 255, 239);}' +
     '.special-notice img {position: absolute; right: 28px; top: 25px; height: 20px; opacity: 0.6; -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;float:right;margin-top:-23px;margin-right:-25px;}' +
     '.special-notice img:hover{opacity: 0.9;}' +
     '.special-notice p{font-size: 18px; margin: 0 0 5px 0;}' +
-    '.special-notice a{cursor: pointer;}';
+    '.special-notice a{cursor: pointer;}' +
+    '.special-notice.right {left: auto; right: 60px; top: 5px; transform: none;}' +
+    '.special-notice.right::before, .special-notice.right::after { content: ""; position: absolute; top: 15px; right: -20px; border: 10px solid transparent; border-left: 10px solid #35a7ff;}';
 
 /* add style block with content to the header */
 function addStyles(css){
@@ -75,7 +77,8 @@ function closeNotice(){
     $('.special-notice').fadeOut('fast');
     setTimeout(function(){
         $('.special-notice').remove();
-    }, 500);
+        $( document ).trigger( "noticeClose");
+    }, 300);
 }
 
 /* hide notice block if clicked outside of it */
@@ -95,9 +98,12 @@ function hideNoticeByChild(el){
     $(el).closest('.special-notice').fadeOut('fast');
 }
 
-/* create message block to show */
-function noticeBlockConstructor(message){
-    var block = "<div class='special-notice'>" +
+/* create notice block to show */
+function noticeBlockConstructor(message, specialClass){
+    // we can pass classes to constructor to alter notice's appearance independently
+    if (!specialClass){ specialClass = ''}
+
+    var block = "<div class='special-notice " + specialClass + " '>" +
         "<div>" +
         message +
         "<img class='notice-close' onclick='hideNoticeByChild(this);'  src='/engine/img/chatclose2.png'>" +
@@ -109,7 +115,7 @@ function noticeBlockConstructor(message){
 /* show notice in selected lang unless it was already shown, the run its callback */
 function publishNotice(notice, lang){
     if (!readCookie(notice.cookieName)){
-        showNotice(notice.message[lang], notice.duration);
+        showNotice(notice.message[lang], notice.duration, notice.specialClass);
         if (notice.callback){
             notice.callback();
         }
@@ -117,9 +123,9 @@ function publishNotice(notice, lang){
 }
 
 /* append message block to body */
-function showNotice(message, duration){
+function showNotice(message, duration, specialClass){
 
-    var block = noticeBlockConstructor(message);
+    var block = noticeBlockConstructor(message, specialClass);
 
     $('body').append(block);
     block.slideDown("fast");
@@ -145,7 +151,8 @@ var noticeDeathSuggestion = {
     cookieName: 'deathSuggestion',
     duration: null,
     message: {
-        ru: '<p>Перенаселение убивает. Попробуй другой сервер или режим игры!</p><p><button onclick="showServerSelectScreen(); closeNotice()" class="btn btn-primary">Выбрать сервер и режим игры</button></p>'
+        ru: '<p>Перенаселение убивает. Попробуй другой сервер или режим игры!</p><p><button onclick="showServerSelectScreen(); closeNotice()" class="btn btn-primary">Выбрать сервер и режим игры</button></p>',
+    specialClass: null
     }
 };
 
@@ -158,7 +165,8 @@ var noticeDiscountBanner = {
     duration: null,
     message: {
         ru: '<p>Поздравляем! Вы доигрались до скидки на первое пополнение!</p><p><a href="#"> Здесь будет баннер </a></p>'
-    }
+    },
+    specialClass: null
 };
 
 // help button reminder
@@ -170,7 +178,8 @@ var noticeHelpButtonReminder = {
     duration: 14000,
     message: {
         ru: '<p>Остались вопросы? Жми сюда!</p>'
-    }
+    },
+    specialClass: 'right'
 };
 
 // rules introduction
@@ -182,8 +191,11 @@ var noticeWelcome = {
     duration: null,
     message: {
         ru: '<p>Пока тебя не сожрали, запомни простое управление:</p> <p><strong>W</strong> - стрелять </p> <p><strong>ПРОБЕЛ</strong> - разделиться</p>'
-    }
+    },
+    specialClass: null
 };
+
+
 
 /*===============MAIN FUNCTIONS===============*/
 
@@ -233,13 +245,25 @@ function discountBannerTimer(seconds, limit){
     }
 }
 
+// introduction message followed by help button reminder
+function introductionMessage(){
+    publishNotice(noticeWelcome, settedlang);
+
+    // when introduction is closed, show help button reminder
+    $( document ).one( "noticeClose", function() {
+        publishNotice(noticeHelpButtonReminder, settedlang);
+    });
+}
+
+
+
 /*===============TRIGGERS===============*/
 
 // init startup sequence, set styles and closing triggers; this one belongs in $(document).load()
 noticeInitSequence();
 
 // run introduction notice: Launch on first game start
-publishNotice(noticeWelcome, settedlang);
+introductionMessage();
 
 // deathToll check - should be fired after death of the player. Change the number to desired number of deaths
 deathTollCheck(10);
