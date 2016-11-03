@@ -199,7 +199,7 @@ var noticeWelcome = {
 
 /*===============MAIN FUNCTIONS===============*/
 
-/* Launch startup notice init sequence*/
+/* Launch startup init sequence*/
 function noticeInitSequence(){
 
     if (!userIsLoggedIn()){
