@@ -1,271 +1,217 @@
-/*===============STYLES===============*/
-
-/* virtual stylesheet due to restricted access to the server. Could be (and should be) transfered to proper css files */
-var styles =    '.special-notice   {position: fixed; top: 20px; left: 50%; -webkit-transform: translate(-50%, 0px); transform: translate(-50%, 0px); display: none; text-align: center;  z-index: 999999;}' +
-    '.special-notice div {position: relative;display: block;min-width: 400px;box-shadow: rgb(105, 105, 105) 0px -1px 14px -3px inset;font-size: 16px;margin: 0px 0px 10px;padding: 20px 30px 10px;border: 4px solid #35a7ff;-o-border-image: initial;border-image: initial;border-radius: 15px;background: rgb(238, 255, 239);}' +
-    '.special-notice img {position: absolute; right: 28px; top: 25px; height: 20px; opacity: 0.6; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)"; -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;float:right;margin-top:-23px;margin-right:-25px;}' +
+var noticeManager = {
+    /*===============STYLES===============*/
+    /* virtual stylesheet due to restricted access to the server. Could be (and should be) transfered to proper css files */
+    styles: '#special-notice-container {position:fixed; top:0; left: 0; width: 100%; height: 100%;  background: rgba(0, 0, 0, 0.28); cursor: pointer; z-index:9999999; font-family: "SourceSans";} ' +
+    '.special-notice   {position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%, 0px); transform: translate(-50%, -50%); text-align: center;  z-index: 999999;}' +
+    '.special-notice div {position: relative;display: block;min-width: 400px;box-shadow: rgb(105, 105, 105) 0px -1px 14px -3px inset;font-size: 16px;margin: 0px 0px 10px;padding: 20px 30px 10px;border: 4px solid #266fff;-o-border-image: initial;border-image: initial;border-radius: 15px;background: rgb(238, 255, 239);}' +
+    '.special-notice img.notice-close {position: absolute; right: 5px; top: 5px; height: 20px; opacity: 0.6; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)"; -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;float:right;}' +
     '.special-notice img:hover{opacity: 0.9;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";}' +
-    '.special-notice p{font-size: 18px; margin: 0 0 5px 0;}' +
+    '.special-notice img.main-img{ border: 1px solid #91969f;}' +
+    '.special-notice p{font-size: 18px; margin: 0 0 15px 0;}' +
+    '.special-notice p.buttons{margin: 20px 0 10px 0;}' +
     '.special-notice a{cursor: pointer;}' +
+    '.special-notice button{font-family: "SourceSansSemiBold"; background: #1e58cc; display: inline-block;  height: 40px; margin: 0 10px; padding: 0 15px; text-align: center; color:#fff; border: none; border-radius: 20px;cursor: pointer; opacity:0.9;}' +
+    '.special-notice button.grey{ background: #959595;}' +
+    '.special-notice button:focus{ outline:none;}' +
+    '.special-notice button:hover{ opacity:1;}' +
     '.special-notice.right {left: auto; right: 60px; top: 5px; -webkit-transform: none; transform: none;}' +
-    '.special-notice.right:before, .special-notice.right:after { content: ""; position: absolute; top: 15px; right: -20px; border: 10px solid transparent; border-left: 10px solid #35a7ff;}';
+    '.special-notice.right:before, .special-notice.right:after { content: ""; position: absolute; top: 15px; right: -20px; border: 10px solid transparent; border-left: 10px solid #35a7ff;}',
 
-/* add style block with content to the header */
-function addStyles(css){
-    //var css = 'h1 { background: red; }'
-    var head = document.head || document.getElementsByTagName('head')[0],
-        style = document.createElement('style');
+    /* add style block with content to the header */
+    addStyles: function(css){
+        var head = document.head || document.getElementsByTagName('head')[0],
+            style = document.createElement('style');
 
-    style.type = 'text/css';
-    if (style.styleSheet){
-        style.styleSheet.cssText = css;
-    } else {
-        style.appendChild(document.createTextNode(css));
-    }
-    head.appendChild(style);
-}
+        style.type = 'text/css';
+        if (style.styleSheet){
+            style.styleSheet.cssText = css;
+        } else {
+            style.appendChild(document.createTextNode(css));
+        }
+        head.appendChild(style);
+    },
 
-
-
-/*===============HELPERS===============*/
-
-function showServerSelectScreen(){
-    $('#stats,#serverstats').hide();
-    $('#statssmall, #helloDialog, #lowerhelp, #descriptionDialog').show();
-}
+    /*===============HELPERS===============*/
 
 
-/*===============COOKIE OPERATIONS===============*/
+    /*===============COOKIE OPERATIONS===============*/
 
-/* set play time and return it */
-function addPlayTime(seconds){
+    /* check if user is logged in with master password */
+    userIsLoggedIn: function (){
+        if (readCookie('masterid')){ return true; }
+    },
 
-    if (!seconds){seconds = 0}
 
-    var countedTime = readCookie('countedPlayTime');
+    /*===============NOTICE MANIPULATIONS===============*/
 
-    if (!countedTime){
-        countedTime = seconds;
-    } else if (seconds > 0) {
-        countedTime = parseInt(countedTime) + seconds;
-    }
+    /* simply close notice */
+    closeNotice: function(){
+        $('#special-notice-container').fadeOut('fast');
+        setTimeout(function(){
+            $('#special-notice-container').remove();
+            $( document ).trigger( "noticeClose");
+        }, 300);
+    },
 
-    createCookie('countedPlayTime', countedTime);
-    return countedTime;
-}
+    /* hide notice block if clicked outside of it */
+    closeNoticeOnOutsideClick: function(){
+        // accepts parent '.dropdown' div
+        $(document).click(function(event) {
+            if(!$(event.target).closest('#special-notice-container').length) {
+                if ($('#special-notice-container').length){
+                    noticeManager.closeNotice();
+                }
+            }
+        });
+    },
 
-/* total counted play time */
-function getPlayTime(){
-    var countedTime = readCookie('countedPlayTime');
+    /* Close the passed element's parent .special-notice - used to hide notice on X button */
+    hideNoticeByChild: function(el){
+        $(el).closest('#special-notice-container').fadeOut('fast');
+    },
 
-    if (countedTime){
-        return parseInt(countedTime);
-    } else {
-        return 0;
-    }
-}
+    /* create notice block to show */
+    noticeBlockConstructor: function(message, specialClass){
+        // we can pass classes to constructor to alter notice's appearance independently
+        if (!specialClass){ specialClass = '';}
 
-/* check if user is logged in with master password */
-function userIsLoggedIn(){
-    if (readCookie('masterid')){ return true }
-}
+        var block =
+            "<div id='special-notice-container'>" +
+            "<div class='special-notice " + specialClass + " '>" +
+            "<div>" +
+            message +
+            "<img class='notice-close' onclick='noticeManager.closeNotice();'  src='/engine/img/chatclose2.png'>" +
+            "</div>" +
+            "</div>"+
+            "</div>";
+        return $(block);
+    },
 
-/*===============NOTICE MANIPULATIONS===============*/
-
-/* simply close notice */
-function closeNotice(){
-    $('.special-notice').fadeOut('fast');
-    setTimeout(function(){
-        $('.special-notice').remove();
-        $( document ).trigger( "noticeClose");
-    }, 300);
-}
-
-/* hide notice block if clicked outside of it */
-function closeNoticeOnOutsideClick(){
-    // accepts parent '.dropdown' div
-    $(document).click(function(event) {
-        if(!$(event.target).closest('.special-notice').length) {
-            if ($('.special-notice').css('display') !== 'none'){
-                closeNotice();
+    /* show notice in selected lang unless it was already shown, the run its callback */
+    publishNotice: function(notice, lang){
+        console.log('showing notice', notice.message[lang]);
+        if (!readCookie(notice.cookieName)){
+            noticeManager.showNotice(notice.message[lang], notice.duration, notice.specialClass);
+            if (notice.callback){
+                notice.callback();
             }
         }
-    });
-}
+    },
 
-/* Close the passed element's parent .special-notice - used to hide notice on X button */
-function hideNoticeByChild(el){
-    $(el).closest('.special-notice').fadeOut('fast');
-}
+    /* append message block to body */
+    showNotice: function(message, duration, specialClass){
 
-/* create notice block to show */
-function noticeBlockConstructor(message, specialClass){
-    // we can pass classes to constructor to alter notice's appearance independently
-    if (!specialClass){ specialClass = ''}
+        var block = noticeManager.noticeBlockConstructor(message, specialClass);
 
-    var block = "<div class='special-notice " + specialClass + " '>" +
-        "<div>" +
-        message +
-        "<img class='notice-close' onclick='hideNoticeByChild(this);'  src='/engine/img/chatclose2.png'>" +
-        "</div>" +
-        "</div>";
-    return $(block);
-}
+        $('body').append(block);
+        block.slideDown("fast");
 
-/* show notice in selected lang unless it was already shown, the run its callback */
-function publishNotice(notice, lang){
-    if (!readCookie(notice.cookieName)){
-        showNotice(notice.message[lang], notice.duration, notice.specialClass);
-        if (notice.callback){
-            notice.callback();
+        if (duration){
+            setTimeout(function(){
+                closeNotice();
+            }, duration);
+
         }
-    }
-}
-
-/* append message block to body */
-function showNotice(message, duration, specialClass){
-
-    var block = noticeBlockConstructor(message, specialClass);
-
-    $('body').append(block);
-    block.slideDown("fast");
-
-    if (duration){
-        setTimeout(function(){
-            closeNotice();
-        }, duration);
-
-    }
-}
-
-
-
-/*===============NOTICES===============*/
-
-// invitation to go play some other server after numerous deaths
-var noticeDeathSuggestion = {
-    callback: function(){
-        //createCookie(this.cookieName, 'done');  //uncomment this if this notice needs to be ran only once per user
-        eraseCookie('deathToll');
     },
-    cookieName: 'deathSuggestion',
-    duration: null,
-    message: {
-        ru: '<p>Перенаселение убивает. Попробуй другой сервер или режим игры!</p><p><button onclick="showServerSelectScreen(); closeNotice()" class="btn btn-primary">Выбрать сервер и режим игры</button></p>',
-    specialClass: null
-    }
-};
-
-// discount banner after a certain amount of game time
-var noticeDiscountBanner = {
-    callback:  function(){
-        createCookie(this.cookieName, 'done');
-    },
-    cookieName: 'discountBanner',
-    duration: null,
-    message: {
-        ru: '<p>Поздравляем! Вы доигрались до скидки на первое пополнение!</p><p><a href="#"> Здесь будет баннер </a></p>'
-    },
-    specialClass: null
-};
-
-// help button reminder
-var noticeHelpButtonReminder = {
-    callback: function(){
-        createCookie(this.cookieName, 'done');
-    },
-    cookieName: 'helpButtonReminder',
-    duration: 14000,
-    message: {
-        ru: '<p>Остались вопросы? Жми сюда!</p>'
-    },
-    specialClass: 'right'
-};
-
-// rules introduction
-var noticeWelcome = {
-    callback: function(){
-        createCookie(this.cookieName, 'done');
-    },
-    cookieName: 'noticeWelcome',
-    duration: null,
-    message: {
-        ru: '<p>Пока тебя не сожрали, запомни простое управление:</p> <p><strong>W</strong> - стрелять </p> <p><strong>ПРОБЕЛ</strong> - разделиться</p>'
-    },
-    specialClass: null
-};
 
 
 
-/*===============MAIN FUNCTIONS===============*/
 
-/* Launch startup init sequence*/
-function noticeInitSequence(){
+    /*===============MAIN FUNCTIONS===============*/
 
-    if (!userIsLoggedIn()){
-        // inject css
-        addStyles(styles);
+    /* Launch startup init sequence*/
+    noticeInitSequence: function(){
+        noticeManager.addStyles(noticeManager.styles);
 
         // listen for clicks outside of notice to hide it
-        closeNoticeOnOutsideClick();
+        noticeManager.closeNoticeOnOutsideClick();
+
+        /*if (!noticeManager.userIsLoggedIn()){
+            // inject css
+
+        }*/
+    },
+
+    // count user deaths and show suggestion on specific counter
+     deathTollCheck: function(maxDeathCount){
+        console.log('checking death toll');
+        // don't check for user login as we probably want to suggest to guests, too
+        var deathToll;
+        // check and increment deathToll, as player just died
+        if (readCookie('deathToll')){
+            deathToll = parseInt(readCookie('deathToll')) + 1;
+        } else {
+            deathToll = 1;
+        }
+        // update the cookie
+        createCookie('deathToll', deathToll);
+
+        // if all clear, publish the notice
+        if ((deathToll >= maxDeathCount) && !readCookie('pushSuggestion')){
+            console.log('calling publish notice');
+            noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
+            // clear the death toll
+            createCookie('deathToll', 0);
+        } else {
+            console.log('not calling publish notice', (deathToll >= maxDeathCount), !readCookie('pushSuggestion'));
+        }
+    },
+
+
+
+    /*===============NOTICES===============*/
+
+    notices: {
+        // show push suggestion after first death
+        pushSuggestion: {
+            callback: function(){
+                createCookie(this.cookieName, 'done');  //uncomment this if this notice needs to be ran only once per user
+                //eraseCookie('pushSuggestion');
+            },
+            cookieName: 'pushSuggestion',
+            duration: null,
+            message: {
+                ru: "<p>Текст для приглашения на пуши.</p>" +
+                    "<img class='main-img' src='https://o-zarabotkeonline.ru/wp-content/uploads/2016/08/nastroyki-formyi-podpiski-na-push.png'" +
+                " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200')\"" +
+                ">"+
+                "<p class='buttons'>" +
+                "<button " +
+                " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200')\"" +
+                ">Подписаться на уведомления и получить бонусы</button>" +
+                "<button onclick=\'\' class=\'grey\'>Отложить</button>" +
+                "</p>",
+                specialClass: null
+            },
+            windowOpener: function(){
+                console.log('w3');
+            }
+        }
     }
-}
-
-// count user deaths and show suggestion on specific counter
-function deathTollCheck(maxDeathCount){
-    // don't check for user login as we probably want to suggest to guests, too
-    var deathToll;
-    // check and increment deathToll, as player just died
-    if (readCookie('deathToll')){
-        deathToll = parseInt(readCookie('deathToll')) + 1;
-    } else {
-        deathToll = 1;
-    }
-    // update the cookie
-    createCookie('deathToll', deathToll);
-
-    // if all clear, publish the notice
-    if ((deathToll >= maxDeathCount) && !readCookie('deathSuggestion')){
-        publishNotice(noticeDeathSuggestion, settedlang);
-        // clear the death toll
-        createCookie('deathToll', 0);
-    }
-}
-
-// show banner with a discount link after some time
-function discountBannerTimer(seconds, limit){
-    addPlayTime(seconds);
-    console.log(getPlayTime());
-    if (getPlayTime() >= limit){
-        publishNotice(noticeDiscountBanner, settedlang);
-    }
-}
-
-// introduction message followed by help button reminder
-function introductionMessage(){
-    if (!userIsLoggedIn()){
-        publishNotice(noticeWelcome, settedlang);
-
-        // when introduction is closed, show help button reminder
-        $( document ).one( "noticeClose", function() {
-            publishNotice(noticeHelpButtonReminder, settedlang);
-        });
-    }
-}
-
+};
 
 
 /*===============TRIGGERS===============*/
 
 // init startup sequence, set styles and closing triggers; this one belongs in $(document).load()
-noticeInitSequence();
 
-// run introduction notice: Launch on first game start
-introductionMessage();
+$(document).load(function(){
+    noticeManager.noticeInitSequence();
+});
 
-// deathToll check - should be fired after death of the player. Change the number to desired number of deaths
-deathTollCheck(10);
+//close notice by click on anything
+$(document).on('click', '#special-notice-container', function(){
+    noticeManager.closeNotice();
+});
 
-//discount time counter - needs to have passed PLAYTIME in seconds from last round stats (like in stats32.js:380) and total LIMIT in seconds, after which bannerwill be shown
-//discountBannerTimer(seconds, limit);
-discountBannerTimer(200, 3600);
+
+// deathToll check - should be fired after death of the player. Fire with $(document).trigger( "playerDeath" );
+$(document).on('playerDeath', function(event){
+    noticeManager.deathTollCheck(1);
+});
+
+
+// test triggers
+noticeManager.noticeInitSequence();
+eraseCookie('pushSuggestion');
+$(document).trigger( "playerDeath" );
