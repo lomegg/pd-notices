@@ -1,9 +1,9 @@
 var noticeManager = {
     /*===============STYLES===============*/
     /* virtual stylesheet due to restricted access to the server. Could be (and should be) transfered to proper css files */
-    styles: '#special-notice-container {position:fixed; top:0; left: 0; width: 100%; height: 100%;  background: rgba(0, 0, 0, 0.28); cursor: pointer; z-index:9999999; font-family: "SourceSans";} ' +
+    styles: '#special-notice-container {position:fixed; top:0; left: 0; width: 100%; height: 100%;  background: rgba(0, 0, 0, 0.75); cursor: pointer; z-index:9999999; font-family: "SourceSans";} ' +
     '.special-notice   {position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%, 0px); transform: translate(-50%, -50%); text-align: center;  z-index: 999999;}' +
-    '.special-notice div {position: relative;display: block;min-width: 400px;box-shadow: rgb(105, 105, 105) 0px -1px 14px -3px inset;font-size: 16px;margin: 0px 0px 10px;padding: 20px 30px 10px;border: 4px solid #266fff;-o-border-image: initial;border-image: initial;border-radius: 15px;background: rgb(238, 255, 239);}' +
+    '.special-notice div {position: relative;display: block;min-width: 400px;box-shadow: rgb(105, 105, 105) 0px -1px 14px -3px inset;font-size: 16px;margin: 0px 0px 10px;padding: 20px 30px 10px;border: 2px solid #266fff;-o-border-image: initial;border-image: initial;border-radius: 5px;background: #fff;}' +
     '.special-notice img.notice-close {position: absolute; right: 5px; top: 5px; height: 20px; opacity: 0.6; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)"; -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;float:right;}' +
     '.special-notice img:hover{opacity: 0.9;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";}' +
     '.special-notice img.main-img{ border: 1px solid #91969f;}' +
@@ -168,7 +168,7 @@ var noticeManager = {
             cookieName: 'pushSuggestion',
             duration: null,
             message: {
-                ru: "<p>Подпишись на пуш-уведомления от PetriDish и получай безумные бонусы и эксклюзивные предложения!</p>" +
+                ru: "<p>Подпишись на пуш-уведомления от PetriDish и получай безумные бонусы!</p>" +
                     "<img class='main-img' src='https://o-zarabotkeonline.ru/wp-content/uploads/2016/08/nastroyki-formyi-podpiski-na-push.png'" +
                     " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
                     ">"+
