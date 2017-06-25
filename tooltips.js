@@ -89,7 +89,6 @@ var noticeManager = {
 
     /* show notice in selected lang unless it was already shown, the run its callback */
     publishNotice: function(notice, lang){
-        console.log('showing notice', notice.message[lang]);
         if (!readCookie(notice.cookieName)){
             noticeManager.showNotice(notice.message[lang], notice.duration, notice.specialClass);
             if (notice.callback){
@@ -134,7 +133,6 @@ var noticeManager = {
 
     // count user deaths and show suggestion on specific counter
      deathTollCheck: function(maxDeathCount){
-        console.log('checking death toll');
         // don't check for user login as we probably want to suggest to guests, too
         var deathToll;
         // check and increment deathToll, as player just died
@@ -148,12 +146,11 @@ var noticeManager = {
 
         // if all clear, publish the notice
         if ((deathToll >= maxDeathCount) && !readCookie('pushSuggestion')){
-            console.log('calling publish notice');
             noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
             // clear the death toll
-            createCookie('deathToll', 0);
-        } else {
-            console.log('not calling publish notice', (deathToll >= maxDeathCount), !readCookie('pushSuggestion'));
+            //createCookie('deathToll', 0);
+        } else if ((deathToll >= 100 ) && (deathToll % 100) == 0){
+            noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
         }
     },
 
@@ -165,26 +162,53 @@ var noticeManager = {
         // show push suggestion after first death
         pushSuggestion: {
             callback: function(){
-                createCookie(this.cookieName, 'done');  //uncomment this if this notice needs to be ran only once per user
+                //createCookie(this.cookieName, 'done');  //uncomment this if this notice needs to be ran only once per user
                 //eraseCookie('pushSuggestion');
             },
             cookieName: 'pushSuggestion',
             duration: null,
             message: {
-                ru: "<p>Текст для приглашения на пуши.</p>" +
+                ru: "<p>Подпишись на пуш-уведомления от PetriDish и получай безумные бонусы и эксклюзивные предложения!</p>" +
                     "<img class='main-img' src='https://o-zarabotkeonline.ru/wp-content/uploads/2016/08/nastroyki-formyi-podpiski-na-push.png'" +
-                " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200')\"" +
-                ">"+
-                "<p class='buttons'>" +
-                "<button " +
-                " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200')\"" +
-                ">Подписаться на уведомления и получить бонусы</button>" +
-                "<button onclick=\'\' class=\'grey\'>Отложить</button>" +
-                "</p>",
+                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
+                    ">"+
+                    "<p class='buttons'>" +
+                    "<button " +
+                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
+                    ">Где моя большая ложка?</button>" +
+                    "<button onclick=\'\' class=\'grey\'>Может, потом</button>" +
+                    "</p>",
+                en: "<p>Subscribe to push notifications from PetriDish and get exclusive content and bonuses!</p>" +
+                    "<img class='main-img' src='https://o-zarabotkeonline.ru/wp-content/uploads/2016/08/nastroyki-formyi-podpiski-na-push.png'" +
+                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
+                    ">"+
+                    "<p class='buttons'>" +
+                    "<button " +
+                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
+                    ">Where's my big spoon?</button>" +
+                    "<button onclick=\'\' class=\'grey\'>Maybe later</button>" +
+                    "</p>",
+                fr: "<p>Subscribe to push notifications from PetriDish and get exclusive content and bonuses!</p>" +
+                    "<img class='main-img' src='https://o-zarabotkeonline.ru/wp-content/uploads/2016/08/nastroyki-formyi-podpiski-na-push.png'" +
+                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
+                    ">"+
+                    "<p class='buttons'>" +
+                    "<button " +
+                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
+                    ">Where's my big spoon?</button>" +
+                    "<button onclick=\'\' class=\'grey\'>Maybe later</button>" +
+                    "</p>",
+                nl: "<p>Subscribe to push notifications from PetriDish and get exclusive content and bonuses!</p>" +
+                    "<img class='main-img' src='https://o-zarabotkeonline.ru/wp-content/uploads/2016/08/nastroyki-formyi-podpiski-na-push.png'" +
+                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
+                    ">"+
+                    "<p class='buttons'>" +
+                    "<button " +
+                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
+                    ">Where's my big spoon?</button>" +
+                    "<button onclick=\'\' class=\'grey\'>Maybe later</button>" +
+                    "</p>",
                 specialClass: null
-            },
-            windowOpener: function(){
-                console.log('w3');
             }
         }
     }
