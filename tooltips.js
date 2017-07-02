@@ -3,14 +3,14 @@ var noticeManager = {
     /* virtual stylesheet due to restricted access to the server. Could be (and should be) transfered to proper css files */
     styles: '#special-notice-container {position:fixed; top:0; left: 0; width: 100%; height: 100%;  background: rgba(0, 0, 0, 0.75); cursor: pointer; z-index:9999999; font-family: "SourceSans";} ' +
     '.special-notice   {position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%, 0px); transform: translate(-50%, -50%); text-align: center;  z-index: 999999;}' +
-    '.special-notice div {position: relative;display: block;min-width: 400px;box-shadow: rgb(105, 105, 105) 0px -1px 14px -3px inset;font-size: 16px;margin: 0px 0px 10px;padding: 20px 30px 10px;border: 2px solid #266fff;-o-border-image: initial;border-image: initial;border-radius: 5px;background: #fff;}' +
+    '.special-notice div {position: relative;display: block;min-width: 400px;box-shadow: rgb(105, 105, 105) 0px -1px 14px -3px inset;font-size: 16px;margin: 0px 0px 10px;padding: 20px 30px 10px;-o-border-image: initial;border-image: initial;border-radius: 2px;background: #fff;}' +
     '.special-notice img.notice-close {position: absolute; right: 5px; top: 5px; height: 20px; opacity: 0.6; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)"; -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;float:right;}' +
     '.special-notice img:hover{opacity: 0.9;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";}' +
     '.special-notice img.main-img{ border: 1px solid #91969f;}' +
     '.special-notice p{font-size: 18px; margin: 0 0 15px 0;}' +
     '.special-notice p.buttons{margin: 20px 0 10px 0;}' +
     '.special-notice a{cursor: pointer;}' +
-    '.special-notice button{font-family: "SourceSansSemiBold"; background: #1e58cc; display: inline-block;  height: 40px; margin: 0 10px; padding: 0 15px; text-align: center; color:#fff; border: none; border-radius: 20px;cursor: pointer; opacity:0.9;}' +
+    '.special-notice button{ font-family: "SourceSansSemiBold"; background: #ffffff; display: inline-block; height: 40px; margin: 0 10px; padding: 0 15px; text-align: center; color: #0a46ff; border: 1px solid #c3c3c3; border-radius: 2px; cursor: pointer; text-transform: uppercase; opacity: 0.9; }' +
     '.special-notice button.grey{ background: #959595;}' +
     '.special-notice button:focus{ outline:none;}' +
     '.special-notice button:hover{ opacity:1;}' +
@@ -80,7 +80,7 @@ var noticeManager = {
             "<div class='special-notice " + specialClass + " '>" +
             "<div>" +
             message +
-            "<img class='notice-close' onclick='noticeManager.closeNotice();'  src='/engine/img/chatclose2.png'>" +
+            //"<img class='notice-close' onclick='noticeManager.closeNotice();'  src='/engine/img/chatclose2.png'>" +
             "</div>" +
             "</div>"+
             "</div>";
