@@ -168,51 +168,43 @@ var noticeManager = {
             cookieName: 'pushSuggestion',
             duration: null,
             message: {
-                ru: "<p>Подпишись на пуш-уведомления от PetriDish и получай безумные бонусы!</p>" +
-                    "<img class='main-img' src='https://o-zarabotkeonline.ru/wp-content/uploads/2016/08/nastroyki-formyi-podpiski-na-push.png'" +
-                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
-                    ">"+
-                    "<p class='buttons'>" +
-                    "<button " +
-                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
-                    ">Где моя большая ложка?</button>" +
-                    "<button onclick=\'\' class=\'grey\'>Может, потом</button>" +
-                    "</p>",
-                en: "<p>Subscribe to push notifications from PetriDish and get exclusive content and bonuses!</p>" +
-                    "<img class='main-img' src='https://o-zarabotkeonline.ru/wp-content/uploads/2016/08/nastroyki-formyi-podpiski-na-push.png'" +
-                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
-                    ">"+
-                    "<p class='buttons'>" +
-                    "<button " +
-                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
-                    ">Where's my big spoon?</button>" +
-                    "<button onclick=\'\' class=\'grey\'>Maybe later</button>" +
-                    "</p>",
-                fr: "<p>Subscribe to push notifications from PetriDish and get exclusive content and bonuses!</p>" +
-                    "<img class='main-img' src='https://o-zarabotkeonline.ru/wp-content/uploads/2016/08/nastroyki-formyi-podpiski-na-push.png'" +
-                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
-                    ">"+
-                    "<p class='buttons'>" +
-                    "<button " +
-                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
-                    ">Where's my big spoon?</button>" +
-                    "<button onclick=\'\' class=\'grey\'>Maybe later</button>" +
-                    "</p>",
-                nl: "<p>Subscribe to push notifications from PetriDish and get exclusive content and bonuses!</p>" +
-                    "<img class='main-img' src='https://o-zarabotkeonline.ru/wp-content/uploads/2016/08/nastroyki-formyi-podpiski-na-push.png'" +
-                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
-                    ">"+
-                    "<p class='buttons'>" +
-                    "<button " +
-                    " onclick=\"window.open('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "', '', 'height=440, width=650, menubar=no, location=no, titlebar=no, status=no, top=200, left=200'); createCookie('pushSuggestion', 'done'); \"" +
-                    ">Where's my big spoon?</button>" +
-                    "<button onclick=\'\' class=\'grey\'>Maybe later</button>" +
-                    "</p>",
+                ru: pushTeaserGenerator('Подпишись на пуш-уведомления от PetriDish и получай безумные бонусы!', 'Подписаться', 'Нет, спасибо'),
+                en: pushTeaserGenerator('Subscribe to push notifications from PetriDish and get exclusive content and bonuses!', 'Subscribe', 'No thanks'),
+                fr: pushTeaserGenerator('Subscribe to push notifications from PetriDish and get exclusive content and bonuses!', 'Subscribe', 'No thanks'),
+                nl: pushTeaserGenerator('Subscribe to push notifications from PetriDish and get exclusive content and bonuses!', 'Subscribe', 'No thanks'),
                 specialClass: null
             }
         }
     }
 };
+
+function pushTeaserGenerator(message, okButtonTXT, noButtonTXT){
+            return "<p>" + message + "</p>" +
+                    "<p class='buttons'>" +
+                    "<button " +
+                    " onclick=\"openPopup('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "'); createCookie('pushSuggestion', 'done'); \"" +
+                    ">" + okButtonTXT + "</button>" +
+                    "<button onclick=\'\' class=\'grey\'>" + noButtonTXT + "</button>" +
+                    "</p>";
+        }
+
+
+/*===============OPEN POPUP URL=================*/
+
+function openPopup(url) {
+    var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+    var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+    var thisWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+    var thisHeight = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+    // You can set the dimensions of the popup to be whatever you'd like
+    var childWidth = 650;
+    var childHeight = 440;
+    var left = ((thisWidth / 2) - (childWidth / 2)) + dualScreenLeft;
+    var top = ((thisHeight / 2) - (childHeight / 2)) + dualScreenTop;
+    window.open(url, "yoursite-http-popup", 'scrollbars=yes, width=' + childWidth + ', height=' + childHeight + ', top=' + top + ', left=' + left);
+}
+
+
 
 
 /*===============TRIGGERS===============*/
