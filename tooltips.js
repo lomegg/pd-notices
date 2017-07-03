@@ -131,19 +131,23 @@ var noticeManager = {
         }
         // update the cookie
         createCookie('deathToll', deathToll);
-        //logFromSource('Death toll is', deathToll);
+        logFromSource('Death toll is', deathToll);
 
-        if (deathToll >= maxDeathCount ){
-            if (!readCookie('pushSuggestion') || (deathToll % maxDeathCount) == 0){
-                
-                // erase cookie to re-show message if there has been more than 200 deaths
-                if (deathToll % (maxDeathCount + 200) == 0){
-                    eraseCookie(noticeManager.notices.pushSuggestion.cookieName);
+        if (deathToll >= maxDeathCount){
+            // check if we have cookie with oneSignalUserId
+            if (!readCookie('oneSignalUserId')){
+                // check if notice needs publishing and publish it
+                if (!readCookie('pushSuggestion') && (deathToll % maxDeathCount == 0)){
+                    //publish notice if it was never shown on number of deaths divisable by maxDeathCount
+                    noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
                 }
-
-                // open suggestion notice
-                
-                noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);           
+                if ((deathToll == maxDeathCount + 20) || (deathToll == maxDeathCount + 70) || deathToll % (maxDeathCount + 70) == 0){
+                    
+                    // open suggestion notice
+                    noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);    
+                }
+            } else {
+                logFromSource('no need to show anything, we already have id', readCookie('oneSignalUserId'));
             }
         }
     },
@@ -265,10 +269,11 @@ function pushLoadIframeAndSubscriptionStates() {
                 // show user invitation window every 20 deaths
                 if (!readCookie('pushSuggestion')){
                     logFromSource('pushSuggestion cookie not found, showing notice');
-                    noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
+                    noticeManager.deathTollCheck(8);
+                    //noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
                 } else {
-                    logFromSource('pushSuggestion cookie found, we already offered sub. Checking death toll...');
-                    noticeManager.deathTollCheck(20);
+                    logFromSource('pushSuggestion cookie found, we already offered sub.');
+                    //noticeManager.deathTollCheck(20);
                 }
 
             } else if (e.detail.oneSignalUserId){
@@ -351,11 +356,11 @@ $(document).on('click', '#special-notice-container', function(){
 
 // deathToll check - should be fired after death of the player. Fire with $(document).trigger( "playerDeath" );
 $(document).on('playerDeath', function(event){
-    noticeManager.deathTollCheck(20, true);
+    noticeManager.deathTollCheck(8, true);
 });
 
 
-$(document).trigger( "playerDeath" );   // this one belongs to death event
+//$(document).trigger( "playerDeath" );   // this one belongs to death event
 
 
 /*=============TEST TRIGGERS============*/
@@ -369,7 +374,7 @@ eraseCookie('oneSignalUserId');
 
 noticeManager.noticeInitSequence();
 if (readCookie('oneSignalUserId')){
-    logFromSource('Id found in cookie');
+    logFromSource('Id found in cookie', readCookie('oneSignalUserId'));
         // update session with present id
         pushAJAXreq('https://ytktpmcerfe1mtn1kz.petridish.pw/api/update_push_session', {pushId: readCookie('oneSignalUserId') }, function(success){
             logFromSource('Successfully updated session');
