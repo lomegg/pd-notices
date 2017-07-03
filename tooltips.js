@@ -182,29 +182,152 @@ function pushTeaserGenerator(message, okButtonTXT, noButtonTXT){
             return "<p>" + message + "</p>" +
                     "<p class='buttons'>" +
                     "<button " +
-                    " onclick=\"openPopup('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "'); createCookie('pushSuggestion', 'done'); \"" +
+                    " onclick=\"pushOpenPopup('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "'); createCookie('pushSuggestion', 'done'); \"" +
                     ">" + okButtonTXT + "</button>" +
-                    "<button onclick=\'\' class=\'grey\'>" + noButtonTXT + "</button>" +
+                    "<button onclick=\"createCookie('pushSuggestion', 'done');\" class=\'grey\'>" + noButtonTXT + "</button>" +
                     "</p>";
         }
 
 
 /*===============OPEN POPUP URL=================*/
 
-function openPopup(url) {
-    var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
-    var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
-    var thisWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-    var thisHeight = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
-    // You can set the dimensions of the popup to be whatever you'd like
-    var childWidth = 650;
-    var childHeight = 440;
-    var left = ((thisWidth / 2) - (childWidth / 2)) + dualScreenLeft;
-    var top = ((thisHeight / 2) - (childHeight / 2)) + dualScreenTop;
-    window.open(url, "yoursite-http-popup", 'scrollbars=yes, width=' + childWidth + ', height=' + childHeight + ', top=' + top + ', left=' + left);
+// Create iframe with proper params
+var pushCreateHiddenDomIframe = function (url, name) {
+    var node = document.createElement("iframe");
+    node.style.display = "none";
+
+    node.setAttribute('sandbox', "allow-same-origin allow-scripts allow-popups allow-forms");
+    if (!url) {
+        url = 'about:blank';
+    }
+    node.src = url;
+    if (name) {
+        node.name = name;
+    }
+    document.body.appendChild(node);
+    return node;
+};
+
+// Calculate the optimal position and open popup there
+var pushOpenPopup = function(url) {
+        var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+        var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+        var thisWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+        var thisHeight = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+        // You can set the dimensions of the popup to be whatever you'd like
+        var childWidth = 650;
+        var childHeight = 440;
+        var left = ((thisWidth / 2) - (childWidth / 2)) + dualScreenLeft;
+        var top = ((thisHeight / 2) - (childHeight / 2)) + dualScreenTop;
+        window.open(url, "Petridish.pw - Push Subscription", 'scrollbars=yes, width=' + childWidth + ', height=' + childHeight + ', top=' + top + ', left=' + left);
+};
+
+// Main push runner
+function pushLoadIframeAndSubscriptionStates() {
+    var isSubscribedToOneSignal = false;
+    var oneSignalUserId = null;
+    var savedTags = null;
+
+    var iframeUrl = 'https://push.petridish.pw/iframe.html?ver=1.24';
+    var popupUrl = 'https://push.petridish.pw/index.html?origin=' + location.origin;
+    var iframeOrigin = new URL(iframeUrl).origin;
+    var iframe = pushCreateHiddenDomIframe(iframeUrl);
+    
+    iframe.onload = function() {
+        //logFromSource('iFrame @ ' + iframe.src + ' finished loading.');
+        iframe.contentWindow.postMessage({
+            command: 'query'
+        }, iframeOrigin);
+
+        function receiveMessage(event) {
+
+            if (event.data.command === 'reply') {
+                var results = event.data.extra;
+                isSubscribedToOneSignal = results[0];
+                oneSignalUserId = results[1];
+
+                // Dispatch the done event
+                window.dispatchEvent(new CustomEvent('iframeinitialize', {
+                    detail: {
+                        subscribed: results[0],
+                        oneSignalUserId: results[1]
+                    }}));
+
+            }
+        }
+
+        window.addEventListener("message", receiveMessage, false);
+
+
+        // After the iframe has sent us the user's subscription state, saved tags, and user ID
+        // We can decide how to prompt the user
+
+
+        window.addEventListener('iframeinitialize', function(e) {
+            // e.detail = {subscribed: Boolean, oneSignalUserId: undefined / String}
+            
+            //logFromSource('iframe initialized', e.detail);
+            if (!e.detail.subscribed) {
+                // show user invitation window every 20 deaths
+                if (!readCookie('pushSuggestion')){
+                    //logFromSource('Running first subscribtion offer');
+                    noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
+                } else {
+                    //logFromSource('User not subscribed, but we already offered sub. Checking death toll...');
+                    noticeManager.deathTollCheck(20);
+                }
+
+            } else if (e.detail.oneSignalUserId){
+                var userId = e.detail.oneSignalUserId;
+                // update user session
+                pushAJAXreq('https://ytktpmcerfe1mtn1kz.petridish.pw/api/update_push_session', {pushId: userId }, function(success){
+                    if (!readCookie('oneSignalUserId')){
+                        logFromSource('no cookie found');
+                        createCookie('oneSignalUserId', userId);
+                    } else {logFromSource('cookie found');}
+                    //logFromSource('Successfully updated session');
+                }, function(fail){
+                    //logFromSource('Failed to update session');
+                }) ;}
+        }, false);
+
+    
+    };
 }
 
 
+
+/*==============SERVICE=================*/
+
+
+function pushAJAXreq(url, data, callback, errorCallback){
+    $.ajax({
+        type: 'GET',
+        async: true,
+        url: url,
+        dataType: 'json',
+        data: data
+    }).done(function (returnedData) {
+        if (callback){
+            callback(returnedData);
+        }
+    }).error(function(error, data) {
+        if (data){
+            console.warn('error data', error, data);
+        }
+        if (errorCallback){
+            errorCallback(data);
+        }
+    });
+}
+
+
+
+function logFromSource() {
+    var args = Array.prototype.slice.call(arguments);
+    args.unshift(location.href + ':');
+    console.log.apply(console, args);
+}
 
 
 /*===============TRIGGERS===============*/
