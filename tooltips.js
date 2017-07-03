@@ -36,6 +36,7 @@ var noticeManager = {
 
     /* simply close notice */
     closeNotice: function(){
+        createCookie('pushSuggestion', 'done');
         $('#special-notice-container').fadeOut('fast');
         setTimeout(function(){
             $('#special-notice-container').remove();
