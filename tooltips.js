@@ -2,7 +2,7 @@ var noticeManager = {
     /*===============STYLES===============*/
     /* virtual stylesheet due to restricted access to the server. Could be (and should be) transfered to proper css files */
     styles: '#special-notice-container {position:fixed; top:0; left: 0; width: 100%; height: 100%;  background: rgba(0, 0, 0, 0.75); cursor: pointer; z-index:9999999; font-family: "SourceSans";} ' +
-    '.special-notice   {position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%, 0px); transform: translate(-50%, -50%); text-align: center;  z-index: 999999;}' +
+    '.special-notice   {position: absolute; top: 25%; left: 50%; -webkit-transform: translate(-50%, 0px); transform: translate(-50%, -50%); text-align: center;  z-index: 999999;}' +
     '.special-notice div {position: relative;display: block;min-width: 400px;box-shadow: rgb(105, 105, 105) 0px -1px 14px -3px inset;font-size: 16px;margin: 0px 0px 10px;padding: 20px 30px 10px;-o-border-image: initial;border-image: initial;border-radius: 2px;background: #fff;}' +
     '.special-notice img.notice-close {position: absolute; right: 5px; top: 5px; height: 20px; opacity: 0.6; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)"; -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;float:right;}' +
     '.special-notice img:hover{opacity: 0.9;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";}' +
