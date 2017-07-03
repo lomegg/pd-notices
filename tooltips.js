@@ -80,14 +80,11 @@ var noticeManager = {
 
     /* show notice in selected lang unless it was already shown, the run its callback */
     publishNotice: function(notice, lang){
-        if (!readCookie(notice.cookieName)){
-            logFromSource('cookie not present - publishing notice', notice, lang);
-            noticeManager.showNotice(notice.message[lang], notice.duration, notice.specialClass);
-            if (notice.callback){
-                notice.callback();
-            }
-        } else {
-            logFromSource('cookie ' + notice.cookieName + ' present, cannot publish notice');
+        
+        logFromSource('cookie not present - publishing notice', notice, lang);
+        noticeManager.showNotice(notice.message[lang], notice.duration, notice.specialClass);
+        if (notice.callback){
+            notice.callback();
         }
     },
 
