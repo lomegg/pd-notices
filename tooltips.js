@@ -11,7 +11,7 @@ var noticeManager = {
     '.special-notice p.buttons{margin: 20px 0 10px 0;}' +
     '.special-notice a{cursor: pointer;}' +
     '.special-notice button{ font-family: "SourceSansSemiBold"; background: #ffffff; display: inline-block; height: 40px; margin: 0 10px; padding: 0 15px; text-align: center; color: #0a46ff; border: 1px solid #c3c3c3; border-radius: 2px; cursor: pointer; text-transform: uppercase; opacity: 0.9; }' +
-    '.special-notice button.grey{ background: #959595;}' +
+    '.special-notice button.grey{ background: #d4d4d4;}' +
     '.special-notice button:focus{ outline:none;}' +
     '.special-notice button:hover{ opacity:1;}' +
     '.special-notice.right {left: auto; right: 60px; top: 5px; -webkit-transform: none; transform: none;}' +
@@ -29,16 +29,6 @@ var noticeManager = {
             style.appendChild(document.createTextNode(css));
         }
         head.appendChild(style);
-    },
-
-    /*===============HELPERS===============*/
-
-
-    /*===============COOKIE OPERATIONS===============*/
-
-    /* check if user is logged in with master password */
-    userIsLoggedIn: function (){
-        if (readCookie('masterid')){ return true; }
     },
 
 
@@ -89,6 +79,7 @@ var noticeManager = {
 
     /* show notice in selected lang unless it was already shown, the run its callback */
     publishNotice: function(notice, lang){
+        //logFromSource('publishing notice', notice, lang);
         if (!readCookie(notice.cookieName)){
             noticeManager.showNotice(notice.message[lang], notice.duration, notice.specialClass);
             if (notice.callback){
@@ -99,6 +90,7 @@ var noticeManager = {
 
     /* append message block to body */
     showNotice: function(message, duration, specialClass){
+        //logFromSource('showing notice', message, duration, specialClass);
 
         var block = noticeManager.noticeBlockConstructor(message, specialClass);
 
@@ -170,7 +162,7 @@ var noticeManager = {
             cookieName: 'pushSuggestion',
             duration: null,
             message: {
-                ru: pushTeaserGenerator('Подпишись на пуш-уведомления от PetriDish и получай безумные бонусы!', 'Подписаться', 'Нет, спасибо'),
+                ru: pushTeaserGenerator('Подпишись на уведомления о новинках и бонусах от PetriDish!', 'Подписаться', 'Нет, спасибо'),
                 en: pushTeaserGenerator('Subscribe to push notifications from PetriDish and get exclusive content and bonuses!', 'Subscribe', 'No thanks'),
                 fr: pushTeaserGenerator('Subscribe to push notifications from PetriDish and get exclusive content and bonuses!', 'Subscribe', 'No thanks'),
                 nl: pushTeaserGenerator('Subscribe to push notifications from PetriDish and get exclusive content and bonuses!', 'Subscribe', 'No thanks'),
@@ -338,6 +330,17 @@ function logFromSource() {
 
 $(document).load(function(){
     noticeManager.noticeInitSequence();
+    if (readCookie('oneSignalUserId')){
+        // update session with present id
+        pushAJAXreq('https://ytktpmcerfe1mtn1kz.petridish.pw/api/update_push_session', {pushId: readCookie('oneSignalUserId') }, function(success){
+            //logFromSource('Successfully updated session');
+        }, function(fail){
+            //logFromSource('Failed to update session');
+        });
+    } else{
+        // run all the stuff
+        pushLoadIframeAndSubscriptionStates(); 
+    }
 });
 
 //close notice by click on anything
@@ -348,11 +351,27 @@ $(document).on('click', '#special-notice-container', function(){
 
 // deathToll check - should be fired after death of the player. Fire with $(document).trigger( "playerDeath" );
 $(document).on('playerDeath', function(event){
-    noticeManager.deathTollCheck(1);
+    noticeManager.deathTollCheck(20, true);
 });
 
 
-// test triggers
-noticeManager.noticeInitSequence();
-eraseCookie('pushSuggestion');
-$(document).trigger( "playerDeath" );
+$(document).trigger( "playerDeath" );   // this one belongs to death event
+
+
+/*=============TEST TRIGGERS============*/
+
+//noticeManager.noticeInitSequence();
+//eraseCookie('pushSuggestion');
+//pushLoadIframeAndSubscriptionStates();    // this one belongs to document load
+
+if (readCookie('oneSignalUserId')){
+        // update session with present id
+        pushAJAXreq('https://ytktpmcerfe1mtn1kz.petridish.pw/api/update_push_session', {pushId: readCookie('oneSignalUserId') }, function(success){
+            logFromSource('Successfully updated session');
+        }, function(fail){
+            logFromSource('Failed to update session');
+        });
+    } else{
+        // run all the stuff
+        pushLoadIframeAndSubscriptionStates(); 
+    }
