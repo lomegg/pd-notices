@@ -81,7 +81,7 @@ var noticeManager = {
     /* show notice in selected lang unless it was already shown, the run its callback */
     publishNotice: function(notice, lang){
         
-        logFromSource('cookie not present - publishing notice', notice, lang);
+        //logFromSource('cookie not present - publishing notice', notice, lang);
         noticeManager.showNotice(notice.message[lang], notice.duration, notice.specialClass);
         if (notice.callback){
             notice.callback();
@@ -90,7 +90,7 @@ var noticeManager = {
 
     /* append message block to body */
     showNotice: function(message, duration, specialClass){
-        logFromSource('showing notice', message, duration, specialClass);
+        //logFromSource('showing notice', message, duration, specialClass);
 
         var block = noticeManager.noticeBlockConstructor(message, specialClass);
 
@@ -131,7 +131,7 @@ var noticeManager = {
         }
         // update the cookie
         createCookie('deathToll', deathToll);
-        logFromSource('Death toll is', deathToll);
+        //logFromSource('Death toll is', deathToll);
 
         if (deathToll >= maxDeathCount){
             // check if we have cookie with oneSignalUserId
@@ -147,7 +147,7 @@ var noticeManager = {
                     noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);    
                 }
             } else {
-                logFromSource('no need to show anything, we already have id', readCookie('oneSignalUserId'));
+                //logFromSource('no need to show anything, we already have id', readCookie('oneSignalUserId'));
             }
         }
     },
@@ -232,7 +232,7 @@ function pushLoadIframeAndSubscriptionStates() {
     var iframe = pushCreateHiddenDomIframe(iframeUrl);
     
     iframe.onload = function() {
-        logFromSource('iFrame @ ' + iframe.src + ' finished loading.');
+        //logFromSource('iFrame @ ' + iframe.src + ' finished loading.');
         iframe.contentWindow.postMessage({
             command: 'query'
         }, iframeOrigin);
@@ -268,11 +268,11 @@ function pushLoadIframeAndSubscriptionStates() {
             if (!e.detail.subscribed) {
                 // show user invitation window every 20 deaths
                 if (!readCookie('pushSuggestion')){
-                    logFromSource('pushSuggestion cookie not found, showing notice');
+                    //logFromSource('pushSuggestion cookie not found, showing notice');
                     noticeManager.deathTollCheck(8);
                     //noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
                 } else {
-                    logFromSource('pushSuggestion cookie found, we already offered sub.');
+                    //logFromSource('pushSuggestion cookie found, we already offered sub.');
                     //noticeManager.deathTollCheck(20);
                 }
 
@@ -280,13 +280,15 @@ function pushLoadIframeAndSubscriptionStates() {
                 var userId = e.detail.oneSignalUserId;
                 // update user session
                 pushAJAXreq('https://ytktpmcerfe1mtn1kz.petridish.pw/api/update_push_session', {pushId: userId }, function(success){
-                    logFromSource('Successfully updated session');
+                    //logFromSource('Successfully updated session');
                     if (!readCookie('oneSignalUserId')){
-                        logFromSource('no oneSignalUserId cookie found, creating');
+                        //logFromSource('no oneSignalUserId cookie found, creating');
                         createCookie('oneSignalUserId', userId);
-                    } else {logFromSource('oneSignalUserId cookie already present');}
+                    } else {
+                        //logFromSource('oneSignalUserId cookie already present');
+                    }
                 }, function(fail){
-                    logFromSource('Failed to update session');
+                    //logFromSource('Failed to update session');
                 }) ;}
         }, false);
 
@@ -338,9 +340,9 @@ $(document).load(function(){
     if (readCookie('oneSignalUserId')){
         // update session with present id
         pushAJAXreq('https://ytktpmcerfe1mtn1kz.petridish.pw/api/update_push_session', {pushId: readCookie('oneSignalUserId') }, function(success){
-            logFromSource('Successfully updated session');
+            //logFromSource('Successfully updated session');
         }, function(fail){
-            logFromSource('Failed to update session');
+            //logFromSource('Failed to update session');
         });
     } else{
         // run all the stuff
@@ -374,15 +376,15 @@ eraseCookie('oneSignalUserId');
 
 noticeManager.noticeInitSequence();
 if (readCookie('oneSignalUserId')){
-    logFromSource('Id found in cookie', readCookie('oneSignalUserId'));
+    //logFromSource('Id found in cookie', readCookie('oneSignalUserId'));
         // update session with present id
         pushAJAXreq('https://ytktpmcerfe1mtn1kz.petridish.pw/api/update_push_session', {pushId: readCookie('oneSignalUserId') }, function(success){
-            logFromSource('Successfully updated session');
+            //('Successfully updated session');
         }, function(fail){
-            logFromSource('Failed to update session');
+            //logFromSource('Failed to update session');
         });
     } else{
-        logFromSource('Id not found in cookie');
+        //logFromSource('Id not found in cookie');
         // run all the stuff
         pushLoadIframeAndSubscriptionStates(); 
     }
