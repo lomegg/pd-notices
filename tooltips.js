@@ -124,33 +124,35 @@ var noticeManager = {
 
         // listen for clicks outside of notice to hide it
         noticeManager.closeNoticeOnOutsideClick();
-
-        /*if (!noticeManager.userIsLoggedIn()){
-            // inject css
-
-        }*/
     },
 
     // count user deaths and show suggestion on specific counter
-     deathTollCheck: function(maxDeathCount){
+     deathTollCheck: function(maxDeathCount, increment){
         // don't check for user login as we probably want to suggest to guests, too
         var deathToll;
+        increment = increment || false;
         // check and increment deathToll, as player just died
         if (readCookie('deathToll')){
-            deathToll = parseInt(readCookie('deathToll')) + 1;
+            deathToll = parseInt(readCookie('deathToll')) + (increment ? 1 : 0);
         } else {
-            deathToll = 1;
+            deathToll = increment ? 1 : 0;
         }
         // update the cookie
         createCookie('deathToll', deathToll);
+        //logFromSource('Death toll is', deathToll);
 
-        // if all clear, publish the notice
-        if ((deathToll >= maxDeathCount) && !readCookie('pushSuggestion')){
-            noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
-            // clear the death toll
-            //createCookie('deathToll', 0);
-        } else if ((deathToll >= 100 ) && (deathToll % 100) == 0){
-            noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
+        if (deathToll >= maxDeathCount ){
+            if (!readCookie('pushSuggestion') || (deathToll % maxDeathCount) == 0){
+                
+                // erase cookie to re-show message if there has been more than 200 deaths
+                if (deathToll % (maxDeathCount + 200) == 0){
+                    eraseCookie(noticeManager.notices.pushSuggestion.cookieName);
+                }
+
+                // open suggestion notice
+                
+                noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);           
+            }
         }
     },
 
