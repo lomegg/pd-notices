@@ -221,12 +221,12 @@ var pushOpenPopup = function(url) {
 };
 
 // Main push runner
-function pushLoadIframeAndSubscriptionStates() {
+function pushLoadIframeAndSubscriptionStates(showSuggestion) {
     var isSubscribedToOneSignal = false;
     var oneSignalUserId = null;
     var savedTags = null;
 
-    var iframeUrl = 'https://push.petridish.pw/iframe.html?ver=1.24';
+    var iframeUrl = 'https://push.petridish.pw/iframe.html?ver=1.25';
     var popupUrl = 'https://push.petridish.pw/index.html?origin=' + location.origin;
     var iframeOrigin = new URL(iframeUrl).origin;
     var iframe = pushCreateHiddenDomIframe(iframeUrl);
@@ -267,10 +267,9 @@ function pushLoadIframeAndSubscriptionStates() {
             //logFromSource('iframe initialized', e.detail);
             if (!e.detail.subscribed) {
                 // show user invitation window every 20 deaths
-                if (!readCookie('pushSuggestion')){
-                    //logFromSource('pushSuggestion cookie not found, showing notice');
+                if (!readCookie('pushSuggestion') && showSuggestion){
+                    //this func runs on init, so we'll need to specifically state if we want to deathTollCheck on this stage
                     noticeManager.deathTollCheck(8);
-                    //noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
                 } else {
                     //logFromSource('pushSuggestion cookie found, we already offered sub.');
                     //noticeManager.deathTollCheck(20);
@@ -346,7 +345,7 @@ $(document).load(function(){
         });
     } else{
         // run all the stuff
-        pushLoadIframeAndSubscriptionStates(); 
+        pushLoadIframeAndSubscriptionStates(false); 
     }
 });
 
