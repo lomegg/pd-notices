@@ -36,6 +36,7 @@ var noticeManager = {
 
     /* simply close notice */
     closeNotice: function(){
+        yaCounter30886916.reachGoal('push-detimer-out');
         createCookie('pushSuggestion', 'done');
         $('#special-notice-container').fadeOut('fast');
         setTimeout(function(){
@@ -180,9 +181,9 @@ function pushTeaserGenerator(message, okButtonTXT, noButtonTXT){
             return "<p>" + message + "</p>" +
                     "<p class='buttons'>" +
                     "<button " +
-                    " onclick=\"pushOpenPopup('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "'); createCookie('pushSuggestion', 'done'); \"" +
+                    " onclick=\"pushOpenPopup('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "'); createCookie('pushSuggestion', 'done'); yaCounter30886916.reachGoal('push-detimer-open');\"" +
                     ">" + okButtonTXT + "</button>" +
-                    "<button onclick=\"createCookie('pushSuggestion', 'done');\" class=\'grey\'>" + noButtonTXT + "</button>" +
+                    "<button onclick=\"createCookie('pushSuggestion', 'done');yaCounter30886916.reachGoal('push-detimer-close');\" class=\'grey\'>" + noButtonTXT + "</button>" +
                     "</p>";
         }
 
