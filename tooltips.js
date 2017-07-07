@@ -2,20 +2,26 @@ var noticeManager = {
     /*===============STYLES===============*/
     /* virtual stylesheet due to restricted access to the server. Could be (and should be) transfered to proper css files */
     styles: '#special-notice-container {position:fixed; top:0; left: 0; width: 100%; height: 100%;  background: rgba(0, 0, 0, 0.75); cursor: pointer; z-index:9999999; font-family: "SourceSans";} ' +
-    '.special-notice   {position: absolute; top: 25%; left: 50%; -webkit-transform: translate(-50%, 0px); transform: translate(-50%, -50%); text-align: center;  z-index: 999999;}' +
-    '.special-notice div {position: relative;display: block;min-width: 400px;box-shadow: rgb(105, 105, 105) 0px -1px 14px -3px inset;font-size: 16px;margin: 0px 0px 10px;padding: 20px 30px 10px;-o-border-image: initial;border-image: initial;border-radius: 2px;background: #fff;}' +
+    '.special-notice   { cursor: default; position: absolute; top: 25%; left: 50%; -webkit-transform: translate(-50%, 0px); transform: translate(-50%, -50%); text-align: center;  z-index: 999999;}' +
+    '.special-notice div {position: relative; display: block; min-width: 400px; font-size: 16px;margin: 0px 0px 10px;padding: 20px 30px 10px;-o-border-image: initial;border-image: initial;border-radius: 0; background: repeating-linear-gradient(130deg, #ffffff, #ffffff 25px, #f4f4f4 25px, #f4f4f4 50px ); border: dashed 1px grey; outline: 10px solid white;}' +
+    '.special-notice h4{margin: 0 0 16px 0; font-size: 20px; text-align: center;} ' +
     '.special-notice img.notice-close {position: absolute; right: 5px; top: 5px; height: 20px; opacity: 0.6; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)"; -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;float:right;}' +
     '.special-notice img:hover{opacity: 0.9;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";}' +
-    '.special-notice img.main-img{ border: 1px solid #91969f;}' +
-    '.special-notice p{font-size: 18px; margin: 0 0 15px 0;}' +
-    '.special-notice p.buttons{margin: 20px 0 10px 0;}' +
+    '.special-notice img.main-img{ border: 1px solid #91969f;} ' +
+    '.special-notice p{font-size: 16px; margin: 0 0 15px 0; text-align: center;} ' +
+    '.special-notice p.buttons{margin: 25px 0 20px 0; text-align: center;} ' +
+    '.special-notice p.remark{margin: 10px 0 0 0; font-size: 14px;} ' +
+    '.special-notice p span{ font-weight: bold; margin: 0 0 0 15px;} ' +
     '.special-notice a{cursor: pointer;}' +
-    '.special-notice button{ font-family: "SourceSansSemiBold"; background: #ffffff; display: inline-block; height: 40px; margin: 0 10px; padding: 0 15px; text-align: center; color: #0a46ff; border: 1px solid #c3c3c3; border-radius: 2px; cursor: pointer; text-transform: uppercase; opacity: 0.9; }' +
-    '.special-notice button.grey{ background: #d4d4d4;}' +
-    '.special-notice button:focus{ outline:none;}' +
-    '.special-notice button:hover{ opacity:1;}' +
-    '.special-notice.right {left: auto; right: 60px; top: 5px; -webkit-transform: none; transform: none;}' +
-    '.special-notice.right:before, .special-notice.right:after { content: ""; position: absolute; top: 15px; right: -20px; border: 10px solid transparent; border-left: 10px solid #35a7ff;}',
+    '.special-notice button{ text-transform: none; font-family: "Ubuntu"; background: #ffffff; display: inline-block; height: auto; margin: 0; padding: 5px 15px; text-align: center; color: #0a46ff; cursor: pointer; opacity: 0.9; font-size: 19px;} ' +
+    '.special-notice button.refuse{ border: none; color: gray; text-decoration: none; font-size: 17px; background: none;} ' +
+    '.special-notice button.accept{background-color: rgb(68, 199, 103); border-radius: 28px; border: 1px solid rgb(24, 171, 41); display: inline-block; cursor: pointer; color: rgb(255, 255, 255); font-family: Arial; font-size: 18px; padding: 5px 35px; text-decoration: none; text-shadow: rgb(47, 102, 39) 0px 1px 0px; margin: 0 0 0 85px; } ' +
+    '.special-notice button.grey{ background: #d4d4d4;} ' +
+    '.special-notice button.grey{ background: #d4d4d4;} ' +
+    '.special-notice button:focus{ outline:none;} ' +
+    '.special-notice button:hover{ opacity:1;} ' +
+    '.special-notice.right {left: auto; right: 60px; top: 5px; -webkit-transform: none; transform: none;} ' +
+    '.special-notice.right:before, .special-notice.right:after { content: ""; position: absolute; top: 15px; right: -20px; border: 10px solid transparent; border-left: 10px solid #35a7ff;} ',
 
     /* add style block with content to the header */
     addStyles: function(css){
@@ -46,15 +52,12 @@ var noticeManager = {
     },
 
     /* hide notice block if clicked outside of it */
-    closeNoticeOnOutsideClick: function(){
-        // accepts parent '.dropdown' div
-        $(document).click(function(event) {
-            if(!$(event.target).closest('#special-notice-container').length) {
+    closeNoticeOnOutsideClick: function(element){
+        if(!$(element).closest('#special-notice-container div').length) {
                 if ($('#special-notice-container').length){
                     noticeManager.closeNotice();
                 }
             }
-        });
     },
 
     /* Close the passed element's parent .special-notice - used to hide notice on X button */
@@ -114,9 +117,8 @@ var noticeManager = {
     /* Launch startup init sequence*/
     noticeInitSequence: function(){
         noticeManager.addStyles(noticeManager.styles);
-
         // listen for clicks outside of notice to hide it
-        noticeManager.closeNoticeOnOutsideClick();
+
     },
 
     // count user deaths and show suggestion on specific counter
@@ -167,24 +169,59 @@ var noticeManager = {
             cookieName: 'pushSuggestion',
             duration: null,
             message: {
-                ru: pushTeaserGenerator('Подпишись на уведомления о новинках и бонусах от PetriDish!', 'Подписаться', 'Нет, спасибо'),
-                en: pushTeaserGenerator('Subscribe to push notifications from PetriDish and get exclusive content and bonuses!', 'Subscribe', 'No thanks'),
-                fr: pushTeaserGenerator('Subscribe to push notifications from PetriDish and get exclusive content and bonuses!', 'Subscribe', 'No thanks'),
-                nl: pushTeaserGenerator('Subscribe to push notifications from PetriDish and get exclusive content and bonuses!', 'Subscribe', 'No thanks'),
+                ru: pushTeaserGenerator({
+                        title: 'Скины и скидки бесплатно',
+                        couponTitle: 'Купон на скидку:',
+                        couponCode: '43563456345',
+                        message: 'Больше — после подписки',
+                        okButtonTXT: 'Отказаться',
+                        noButtonTXT: 'Войти в элиту',
+                        remark: 'Без почты, спама и в 2 клика'
+                    }),
+                en: pushTeaserGenerator({
+                        title: 'Skins & discounts for free',
+                        couponTitle: 'Coupon code:',
+                        couponCode: '43563456345',
+                        message: 'Get more after subscription!',
+                        okButtonTXT: 'Refuse',
+                        noButtonTXT: 'Join the elite',
+                        remark: 'No emails, no spam, just 2 clicks'
+                    }),
+                fr: pushTeaserGenerator({
+                        title: 'Skins & discounts for free',
+                        couponTitle: 'Coupon code:',
+                        couponCode: '43563456345',
+                        message: 'Get more after subscription!',
+                        okButtonTXT: 'Refuse',
+                        noButtonTXT: 'Join the elite',
+                        remark: 'No emails, no spam, just 2 clicks'
+                    }),
+                nl: pushTeaserGenerator({
+                        title: 'Skins & discounts for free',
+                        couponTitle: 'Coupon code:',
+                        couponCode: '43563456345',
+                        message: 'Get more after subscription!',
+                        okButtonTXT: 'Refuse',
+                        noButtonTXT: 'Join the elite',
+                        remark: 'No emails, no spam, just 2 clicks'
+                    }),
                 specialClass: null
             }
         }
     }
 };
 
-function pushTeaserGenerator(message, okButtonTXT, noButtonTXT){
-            return "<p>" + message + "</p>" +
+function pushTeaserGenerator(data){
+            return  "<h4>" + data.title + "</h4>" +
+                    "<p>" + data.couponTitle + "<span>" + data.couponCode + "</span>" + "</p>" +
+                    "<p>" + data.message + "</p>" +
                     "<p class='buttons'>" +
-                    "<button " +
-                    " onclick=\"pushOpenPopup('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "'); createCookie('pushSuggestion', 'done'); yaCounter30886916.reachGoal('push-detimer-open');\"" +
-                    ">" + okButtonTXT + "</button>" +
-                    "<button onclick=\"createCookie('pushSuggestion', 'done');yaCounter30886916.reachGoal('push-detimer-close');\" class=\'grey\'>" + noButtonTXT + "</button>" +
-                    "</p>";
+                    "<button class='refuse'" +
+                    " onclick=\"yaCounter30886916.reachGoal('push-detimer-close');noticeManager.closeNotice();\"" +
+                    ">" + data.okButtonTXT + "</button>" +
+                    "<button class='accept' onclick=\" pushOpenPopup('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "'); yaCounter30886916.reachGoal('push-detimer-open'); noticeManager.closeNotice();\" class=\'grey\'>" + data.noButtonTXT + "</button>" +
+                    "</p>" +
+                    "<p class='remark'>" + data.remark + "</p>";
         }
 
 
@@ -331,6 +368,16 @@ function logFromSource() {
 }
 
 
+// function to close the window and call the metric
+function pushDelayOnEscape(){
+    if ($('#special-notice-container').length){
+        $('#special-notice-container').remove();
+        yaCounter30886916.reachGoal('push-detimer-out');
+    }
+
+}
+
+
 /*===============TRIGGERS===============*/
 
 // init startup sequence, set styles and closing triggers; this one belongs in $(document).load()
@@ -351,8 +398,9 @@ $(document).load(function(){
 });
 
 //close notice by click on anything
-$(document).on('click', '#special-notice-container', function(){
-    noticeManager.closeNotice();
+$(document).on('click', '#special-notice-container', function(e){
+    noticeManager.closeNoticeOnOutsideClick(e.target);
+    //noticeManager.closeNotice();
 });
 
 
