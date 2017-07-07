@@ -12,7 +12,7 @@ var noticeManager = {
     '.special-notice p.buttons{margin: 25px 0 20px 0; text-align: center;} ' +
     '.special-notice p.remark{margin: 10px 0 0 0; font-size: 14px;} ' +
     '.special-notice p span{ font-weight: bold; margin: 0 0 0 15px;} ' +
-    '.special-notice a{cursor: pointer;}' +
+    '.special-notice a{cursor: pointer;     color: #0873e8;}' +
     '.special-notice button{ text-transform: none; font-family: "Ubuntu"; background: #ffffff; display: inline-block; height: auto; margin: 0; padding: 5px 15px; text-align: center; color: #0a46ff; cursor: pointer; opacity: 0.9; font-size: 19px;} ' +
     '.special-notice button.refuse{ border: none; color: gray; text-decoration: none; font-size: 17px; background: none;} ' +
     '.special-notice button.accept{background-color: rgb(68, 199, 103); border-radius: 28px; border: 1px solid rgb(24, 171, 41); display: inline-block; cursor: pointer; color: rgb(255, 255, 255); font-family: Arial; font-size: 18px; padding: 5px 35px; text-decoration: none; text-shadow: rgb(47, 102, 39) 0px 1px 0px; margin: 0 0 0 85px; } ' +
@@ -171,8 +171,8 @@ var noticeManager = {
             message: {
                 ru: pushTeaserGenerator({
                         title: 'Скины и скидки бесплатно',
-                        couponTitle: 'Купон на скидку:',
-                        couponCode: '43563456345',
+                        couponTitle: 'Купон на скидку через <a href="http://donate.petridish.pw/" target="_blank">Oplata.info:</a>',
+                        couponCode: 'B9982EC371FF46D6',
                         message: 'Больше — после подписки',
                         okButtonTXT: 'Отказаться',
                         noButtonTXT: 'Войти в элиту',
@@ -180,8 +180,8 @@ var noticeManager = {
                     }),
                 en: pushTeaserGenerator({
                         title: 'Skins & discounts for free',
-                        couponTitle: 'Coupon code:',
-                        couponCode: '43563456345',
+                        couponTitle: 'Coupon code for <a href="http://donate.petridish.pw/" target="_blank">Oplata.info:</a>',
+                        couponCode: 'B9982EC371FF46D6',
                         message: 'Get more after subscription!',
                         okButtonTXT: 'Refuse',
                         noButtonTXT: 'Join the elite',
@@ -189,8 +189,8 @@ var noticeManager = {
                     }),
                 fr: pushTeaserGenerator({
                         title: 'Skins & discounts for free',
-                        couponTitle: 'Coupon code:',
-                        couponCode: '43563456345',
+                        couponTitle: 'Coupon code for <a href="http://donate.petridish.pw/" target="_blank">Oplata.info:</a>',
+                        couponCode: 'B9982EC371FF46D6',
                         message: 'Get more after subscription!',
                         okButtonTXT: 'Refuse',
                         noButtonTXT: 'Join the elite',
@@ -198,8 +198,8 @@ var noticeManager = {
                     }),
                 nl: pushTeaserGenerator({
                         title: 'Skins & discounts for free',
-                        couponTitle: 'Coupon code:',
-                        couponCode: '43563456345',
+                        couponTitle: 'Coupon code for <a href="http://donate.petridish.pw/" target="_blank">Oplata.info:</a>',
+                        couponCode: 'B9982EC371FF46D6',
                         message: 'Get more after subscription!',
                         okButtonTXT: 'Refuse',
                         noButtonTXT: 'Join the elite',
@@ -422,6 +422,7 @@ eraseCookie('oneSignalUserId');
 */
 //pushLoadIframeAndSubscriptionStates();    // this one belongs to document load
 
+/*
 noticeManager.noticeInitSequence();
 if (readCookie('oneSignalUserId')){
     //logFromSource('Id found in cookie', readCookie('oneSignalUserId'));
@@ -436,3 +437,5 @@ if (readCookie('oneSignalUserId')){
         // run all the stuff
         pushLoadIframeAndSubscriptionStates(); 
     }
+
+    */
