@@ -42,7 +42,7 @@ var noticeManager = {
 
     /* simply close notice */
     closeNotice: function(){
-        yaCounter30886916.reachGoal('push-detimer-out');
+        //noticeManager.yaCounter.out();
         createCookie('pushSuggestion', 'done');
         $('#special-notice-container').fadeOut('fast');
         setTimeout(function(){
@@ -56,6 +56,7 @@ var noticeManager = {
         if(!$(element).closest('#special-notice-container div').length) {
                 if ($('#special-notice-container').length){
                     noticeManager.closeNotice();
+                    noticeManager.yaCounter.out();
                 }
             }
     },
@@ -145,9 +146,9 @@ var noticeManager = {
                     noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
                 }
                 if ((deathToll == maxDeathCount + 20) || (deathToll == maxDeathCount + 70) || deathToll % (maxDeathCount + 70) == 0){
-                    
+
                     // open suggestion notice
-                    noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);    
+                    noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
                 }
             } else {
                 //logFromSource('no need to show anything, we already have id', readCookie('oneSignalUserId'));
@@ -208,7 +209,34 @@ var noticeManager = {
                 specialClass: null
             }
         }
+    },
+
+    /***********Yandex counter************/
+
+    yaCounter: {
+        close: function(){
+            try {
+                yaCounter30886916.reachGoal('push-detimer-close');
+            } catch (err) {
+              console.log('Metrica error!', err);
+            }
+        },
+        open: function(){
+            try {
+                yaCounter30886916.reachGoal('push-detimer-open');
+            } catch (err) {
+              console.log('Metrica error!', err);
+            }
+        },
+        out: function(){
+            try {
+                yaCounter30886916.reachGoal('push-detimer-out');
+            } catch (err) {
+              console.log('Metrica error!', err);
+            }
+        },
     }
+
 };
 
 function pushTeaserGenerator(data){
@@ -217,9 +245,9 @@ function pushTeaserGenerator(data){
                     "<p>" + data.message + "</p>" +
                     "<p class='buttons'>" +
                     "<button class='refuse'" +
-                    " onclick=\"yaCounter30886916.reachGoal('push-detimer-close');noticeManager.closeNotice();\"" +
+                    " onclick=\"noticeManager.closeNotice();noticeManager.yaCounter.close();\"" +
                     ">" + data.okButtonTXT + "</button>" +
-                    "<button class='accept' onclick=\" pushOpenPopup('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "'); yaCounter30886916.reachGoal('push-detimer-open'); noticeManager.closeNotice();\" class=\'grey\'>" + data.noButtonTXT + "</button>" +
+                    "<button class='accept' onclick=\" pushOpenPopup('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "'); noticeManager.closeNotice(); noticeManager.yaCounter.open();\" class=\'grey\'>" + data.noButtonTXT + "</button>" +
                     "</p>" +
                     "<p class='remark'>" + data.remark + "</p>";
         }
@@ -372,7 +400,7 @@ function logFromSource() {
 function pushDelayOnEscape(){
     if ($('#special-notice-container').length){
         $('#special-notice-container').remove();
-        yaCounter30886916.reachGoal('push-detimer-out');
+        noticeManager.yaCounter.out();
     }
 
 }
