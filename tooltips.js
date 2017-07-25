@@ -145,7 +145,7 @@ var noticeManager = {
                     //publish notice if it was never shown on number of deaths divisable by maxDeathCount
                     noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
                 }
-                if ((deathToll == maxDeathCount + 20) || (deathToll == maxDeathCount + 70) || deathToll % (maxDeathCount + 70) == 0){
+                if ((deathToll == maxDeathCount + 20) || (deathToll == maxDeathCount + 70) /* || deathToll % (maxDeathCount + 70) == 0*/){
 
                     // open suggestion notice
                     noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
