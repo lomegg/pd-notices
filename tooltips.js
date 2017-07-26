@@ -70,7 +70,6 @@ var noticeManager = {
 
     /* simply close notice */
     closeNotice: function(){
-        createCookie('pushSuggestion', 'done');
         $('#special-notice-container').fadeOut('fast');
         setTimeout(function(){
             $('#special-notice-container').remove();
@@ -122,6 +121,9 @@ var noticeManager = {
 
     /* show notice in selected lang unless it was already shown, the run its callback */
     publishNotice: function(notice, lang){
+        // create corresponding cookie
+        createCookie(notice.cookieName, 'done');
+
         // use english lang if needed
         if (lang != 'ru'){ lang = 'en';}
 
@@ -182,13 +184,15 @@ var noticeManager = {
         if (deathToll >= maxDeathCount){
             // check if we have cookie with oneSignalUserId
             if (!readCookie('oneSignalUserId')){
+                //console.log('No oneSignalId found, proceeding with pushSuggestion', 'deathToll is', deathToll);
                 // check if notice needs publishing and publish it
                 if (!readCookie('pushSuggestion') && (deathToll % maxDeathCount == 0)){
+                    //console.log('deathToll is ', deathToll, ' pushSuggestion cookie is', readCookie('pushSuggestion'), 'showing push suggestion');
                     //publish notice if it was never shown on number of deaths divisable by maxDeathCount
                     noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
                     showing = true;
-                } else if ((deathToll == maxDeathCount + 50) || (deathToll == maxDeathCount + 150) /* || deathToll % (maxDeathCount + 70) == 0*/){
-
+                } else if (/*(deathToll == maxDeathCount + 50) || */ (deathToll == maxDeathCount + 150) /* || deathToll % (maxDeathCount + 70) == 0*/){
+                    //console.log('deathToll is ', deathToll, ' pushSuggestion cookie is', readCookie('pushSuggestion'), 'showing push suggestion');
                     // open suggestion notice
                     noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
                     showing = true;
@@ -200,6 +204,7 @@ var noticeManager = {
 
         // handle apps invitation
         if (!showing){
+            console.log('deathToll is ', deathToll, ' but we not showing other notices, checking appsSuggestion conditions, cookie is ', readCookie('appsSuggestion'));
             if ((!readCookie('appsSuggestion') && deathToll > 60) || (deathToll == 256)){
                 noticeManager.publishNotice(noticeManager.notices.appsSuggestion, settedlang);
             }
@@ -269,7 +274,7 @@ var noticeManager = {
             duration: null,
             message: {
                 ru: appsSuggestionGenerator({
-                        title: 'Нравится Петридиш?',
+                        title: 'Нравится Чашка Петри?',
                         iosAppDownload: 'Скачать приложение для iPad/iPhone',
                         androidDownload: 'Скачать приложение для Android',
                         pcDownload: 'Скачать приложение для ПК',
@@ -368,7 +373,7 @@ function appsSuggestionGenerator(data){
                         "<a href='" + links.ios + "' title='" + data.iosAppDownload + "' onclick=\"" + onclick.ios + "\" target=\"_blank\">" +
                             "<img src='" + images.ios + "' title='" + data.iosAppDownload + "'>" +
                         "</a>" +
-                        "<a href='" + links.ios + "' title='" + data.iosAppDownload + "' class='app-link' onclick=\"" + onclick.ios + "\" target=\"_blank\">Iphone Ipad</a>" +
+                        "<a href='" + links.ios + "' title='" + data.iosAppDownload + "' class='app-link' onclick=\"" + onclick.ios + "\" target=\"_blank\">Iphone / Ipad</a>" +
                     "</div>" +
 
                     "<div class='apps-item android'>" +
@@ -604,7 +609,7 @@ $(document).on('playerDeath', function(event){
 
 /*=============TEST TRIGGERS============*/
 
-noticeManager.noticeInitSequence();
+//noticeManager.noticeInitSequence();
 /*
 eraseCookie('pushSuggestion');
 eraseCookie('oneSignalUserId');
