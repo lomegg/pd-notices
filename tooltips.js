@@ -6,6 +6,7 @@ var noticeManager = {
     '.special-notice > div {position: relative; display: block; min-width: 400px; font-size: 16px;margin: 0px 0px 70px 0;padding: 20px 30px 10px;-o-border-image: initial;border-image: initial;border-radius: 0; background: repeating-linear-gradient(130deg, #ffffff, #ffffff 25px, #f4f4f4 25px, #f4f4f4 50px ); border: dashed 1px grey; outline: 10px solid white;}' +
     '.special-notice h4{margin: 0 0 16px 0; font-size: 20px; text-align: center;} ' +
     '.special-notice img.notice-close {position: absolute; right: 5px; top: 5px; height: 20px; opacity: 0.6; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)"; -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;float:right;}' +
+    '.special-notice.app .close-notice {    color: #b7b7b7; position: absolute; right: 7px; top: 5px; font-size: 12px; cursor: pointer; display: inline-block;}' +
     '.special-notice img:hover{opacity: 0.9;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";}' +
     '.special-notice img.main-img{ border: 1px solid #91969f;} ' +
     '.special-notice p{font-size: 16px; margin: 0 0 15px 0; text-align: center;} ' +
@@ -287,7 +288,8 @@ var noticeManager = {
                         socialFB: 'Группа Petridish.pw на Facebook',
                         socialTW: 'Petridish.pw в Twitter',
                         instantNews: 'Мгновенные уведомления',
-                        pushExplanation: 'После подписки в пару кликов вы будете получать уведомления об акциях и бонусах'
+                        pushExplanation: 'После подписки в пару кликов вы будете получать уведомления об акциях и бонусах',
+                        closeNotice: 'Закрыть'
                     }),
                 en: appsSuggestionGenerator({
                         title: 'Like Petridish?',
@@ -303,7 +305,8 @@ var noticeManager = {
                         socialFB: 'Petridish.pw on Facebook',
                         socialTW: 'Petridish.pw on Twitter',
                         instantNews: 'Instant news',
-                        pushExplanation: 'After subscription in just 2 clicks you\'ll be able to receive various bonuses & promotions'
+                        pushExplanation: 'After subscription in just 2 clicks you\'ll be able to receive various bonuses & promotions',
+                        closeNotice: 'Close'
                     }),
                 fr: '',
                 nl: ''
@@ -363,11 +366,13 @@ function appsSuggestionGenerator(data){
         vk: 'noticeManager.yaCounter.triggerEvent(\'vk-form-click\');',
         fb: 'noticeManager.yaCounter.triggerEvent(\'fb-form-click\');',
         tw: 'noticeManager.yaCounter.triggerEvent(\'tw-form-click\');',
-        push: 'pushOpenPopup(\'https://push.petridish.pw/?settedLang=' + settedlang.trim() + '\'); noticeManager.yaCounter.triggerEvent(\'push-detimer-open\');'
+        push: 'pushOpenPopup(\'https://push.petridish.pw/?settedLang=' + settedlang.trim() + '\');  noticeManager.yaCounter.triggerEvent(\'push-detimer-open\');',
+        close: 'noticeManager.closeNotice();noticeManager.yaCounter.triggerEvent(\'out-form-death\');'
     };
 
     return  "<div>" +
                 "<h4>" + data.title + "</h4>" +
+                "<div class='close-notice' onclick=\"" + onclick.close + "\" >" + data.closeNotice + "</div>" +
                 "<div class='mobile apps-block'>" +
                     "<div class='apps-item ios'>" +
                         "<a href='" + links.ios + "' title='" + data.iosAppDownload + "' onclick=\"" + onclick.ios + "\" target=\"_blank\">" +
@@ -609,7 +614,7 @@ $(document).on('playerDeath', function(event){
 
 /*=============TEST TRIGGERS============*/
 
-//noticeManager.noticeInitSequence();
+noticeManager.noticeInitSequence();
 /*
 eraseCookie('pushSuggestion');
 eraseCookie('oneSignalUserId');
