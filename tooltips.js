@@ -357,13 +357,13 @@ function appsSuggestionGenerator(data){
         push: 'https://push.petridish.pw'
     },
     onclick = {
-        ios: 'noticeManager.closeNotice(); noticeManager.yaCounter.triggerEvent(\'ios-click-form\');',
-        android: 'noticeManager.closeNotice(); noticeManager.yaCounter.triggerEvent(\'android-click-form\');',
-        pc: 'noticeManager.closeNotice(); noticeManager.yaCounter.triggerEvent(\'pc-form-click\');',
+        ios: 'noticeManager.yaCounter.triggerEvent(\'ios-click-form\');',
+        android: 'noticeManager.yaCounter.triggerEvent(\'android-click-form\');',
+        pc: 'noticeManager.yaCounter.triggerEvent(\'pc-form-click\');',
         vk: 'noticeManager.yaCounter.triggerEvent(\'vk-form-click\');',
         fb: 'noticeManager.yaCounter.triggerEvent(\'fb-form-click\');',
         tw: 'noticeManager.yaCounter.triggerEvent(\'tw-form-click\');',
-        push: 'pushOpenPopup(\'https://push.petridish.pw/?settedLang=' + settedlang.trim() + '\'); noticeManager.closeNotice(); noticeManager.yaCounter.triggerEvent(\'push-detimer-open\');'
+        push: 'pushOpenPopup(\'https://push.petridish.pw/?settedLang=' + settedlang.trim() + '\'); noticeManager.yaCounter.triggerEvent(\'push-detimer-open\');'
     };
 
     return  "<div>" +
