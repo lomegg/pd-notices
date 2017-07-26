@@ -2,14 +2,14 @@ var noticeManager = {
     /*===============STYLES===============*/
     /* virtual stylesheet due to restricted access to the server. Could be (and should be) transfered to proper css files */
     styles: '#special-notice-container {position:fixed; top:0; left: 0; width: 100%; height: 100%;  background: rgba(0, 0, 0, 0.75); cursor: pointer; z-index:9999999; font-family: "SourceSans";} ' +
-    '.special-notice   { cursor: default; position: absolute; top: 25%; left: 50%; -webkit-transform: translate(-50%, 0px); transform: translate(-50%, -50%); text-align: center;  z-index: 999999;}' +
-    '.special-notice div {position: relative; display: block; min-width: 400px; font-size: 16px;margin: 0px 0px 10px;padding: 20px 30px 10px;-o-border-image: initial;border-image: initial;border-radius: 0; background: repeating-linear-gradient(130deg, #ffffff, #ffffff 25px, #f4f4f4 25px, #f4f4f4 50px ); border: dashed 1px grey; outline: 10px solid white;}' +
+    '.special-notice   { cursor: default; position: absolute; top: 25%; left: 50%; -webkit-transform: translate(-50%, -25%); transform: translate(-50%, -25%); text-align: center;  z-index: 999999;}' +
+    '.special-notice > div {position: relative; display: block; min-width: 400px; font-size: 16px;margin: 0px 0px 70px 0;padding: 20px 30px 10px;-o-border-image: initial;border-image: initial;border-radius: 0; background: repeating-linear-gradient(130deg, #ffffff, #ffffff 25px, #f4f4f4 25px, #f4f4f4 50px ); border: dashed 1px grey; outline: 10px solid white;}' +
     '.special-notice h4{margin: 0 0 16px 0; font-size: 20px; text-align: center;} ' +
     '.special-notice img.notice-close {position: absolute; right: 5px; top: 5px; height: 20px; opacity: 0.6; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)"; -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;float:right;}' +
     '.special-notice img:hover{opacity: 0.9;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";}' +
     '.special-notice img.main-img{ border: 1px solid #91969f;} ' +
     '.special-notice p{font-size: 16px; margin: 0 0 15px 0; text-align: center;} ' +
-    '.special-notice p.buttons{margin: 25px 0 20px 0; text-align: center;} ' +
+    '.special-notice .buttons{margin: 25px 0 20px 0; text-align: center;} ' +
     '.special-notice p.remark{margin: 10px 0 0 0; font-size: 14px;} ' +
     '.special-notice p span{ font-weight: bold; margin: 0 0 0 15px;} ' +
     '.special-notice a{cursor: pointer;     color: #0873e8;}' +
@@ -21,7 +21,35 @@ var noticeManager = {
     '.special-notice button:focus{ outline:none;} ' +
     '.special-notice button:hover{ opacity:1;} ' +
     '.special-notice.right {left: auto; right: 60px; top: 5px; -webkit-transform: none; transform: none;} ' +
-    '.special-notice.right:before, .special-notice.right:after { content: ""; position: absolute; top: 15px; right: -20px; border: 10px solid transparent; border-left: 10px solid #35a7ff;} ',
+    '.special-notice.right:before, .special-notice.right:after { content: ""; position: absolute; top: 15px; right: -20px; border: 10px solid transparent; border-left: 10px solid #35a7ff;} ' +
+    '.special-notice .apps-block {  display: inline-block; width: auto; text-align: center; vertical-align: top; margin: 0 10px;} ' +
+    '.special-notice > .socialNotice .apps-block { vertical-align: middle;} ' +
+    '.special-notice .apps-block.pc { max-width: 200px;} ' +
+    '.special-notice .apps-block.pc p{ margin: 10px 0;  font-size: 14px;  line-height: 20px;} ' +
+    '.special-notice .apps-block.pc p a{ margin: 0;} ' +
+    '.special-notice .apps-block.mobile { margin: 0 20px 0 10px;} ' +
+    '.special-notice .apps-item {  display: inline-block;  } ' +
+    '.special-notice .apps-item.ios {margin: 0 60px 0 0;} ' +
+    '.special-notice .apps-block img{  height:70px; width: auto;} ' +
+    '.special-notice .apps-item > a{  display: block;} ' +
+    '.special-notice .apps-item > a {    font-weight: bold;  margin: 15px 0 0 0;} ' +
+    '.special-notice .apps-block  h5{ font-size: 20px; font-weight: 400; margin: 35px 0 0 0; max-width: 240px; line-height: 26px;} ' +
+
+    '.special-notice > .socialNotice{ padding: 20px;}' +
+    '.special-notice .apps-block.updates  h5{ margin: 0 0 5px 0;} ' +
+    '.special-notice .apps-block.updates{ max-width: 150px;} ' +
+    '.special-notice .apps-block.updates p{ margin: 0;} ' +
+    '.special-notice .apps-block.push p{ margin: 0; max-width: 150px;} ' +
+    '.special-notice .apps-block  p > a{ margin: 0 5px 0 0;} ' +
+    '.special-notice .apps-block  p > span{ margin: 0; position: relative; cursor: pointer;} ' +
+    '.special-notice .apps-block  p > span:hover span{ display:block;} ' +
+    '.special-notice .apps-block.icons a{ margin: 0 10px 0 0; font-size: 35px; border: 1px solid gainsboro; width: 40px; height: 40px; display: inline-block; border-radius: 5px;} ' +
+    '.special-notice .apps-block.icons a.vk { background: #4c75a3;  color: white;}' +
+    '.special-notice .apps-block.icons a.fb { background: #3b5998; color: white;}' +
+    '.special-notice .apps-block.icons a.tw {color: #1da1f2; margin: 0;}' +
+    '.special-notice .apps-block.icons a i{ vertical-align: middle;} ' +
+
+    '.special-notice span.absolute {position: absolute; left: 15px; top: -80px; width: 180px; text-align: center; font-weight: 300!important; background: #f4f4f4; border-radius: 5px; padding: 10px; margin: 0; border: 1px solid #bfbfbf; line-height: 20px; font-size: 15px; display:none;} ',
 
     /* add style block with content to the header */
     addStyles: function(css){
@@ -42,7 +70,6 @@ var noticeManager = {
 
     /* simply close notice */
     closeNotice: function(){
-        //noticeManager.yaCounter.out();
         createCookie('pushSuggestion', 'done');
         $('#special-notice-container').fadeOut('fast');
         setTimeout(function(){
@@ -54,9 +81,11 @@ var noticeManager = {
     /* hide notice block if clicked outside of it */
     closeNoticeOnOutsideClick: function(element){
         if(!$(element).closest('#special-notice-container div').length) {
-                if ($('#special-notice-container').length){
+                var container = $('#special-notice-container');
+                if (container.length){
                     noticeManager.closeNotice();
-                    noticeManager.yaCounter.out();
+                    var marker = container.attr('class');
+                    noticeManager.yaCounter.triggerEvent(marker);
                 }
             }
     },
@@ -67,37 +96,47 @@ var noticeManager = {
     },
 
     /* create notice block to show */
-    noticeBlockConstructor: function(message, specialClass){
-        // we can pass classes to constructor to alter notice's appearance independently
-        if (!specialClass){ specialClass = '';}
-
-        var block =
-            "<div id='special-notice-container'>" +
-            "<div class='special-notice " + specialClass + " '>" +
-            "<div>" +
-            message +
-            //"<img class='notice-close' onclick='noticeManager.closeNotice();'  src='/engine/img/chatclose2.png'>" +
-            "</div>" +
-            "</div>"+
-            "</div>";
-        return $(block);
+    noticeBlockConstructor: {
+        push: function(message, specialClass, marker){
+            var block =
+                "<div id='special-notice-container' class='" + marker + "'>" +
+                "<div class='special-notice " + specialClass + " '>" +
+                "<div>" +
+                message +
+                //"<img class='notice-close' onclick='noticeManager.closeNotice();'  src='/engine/img/chatclose2.png'>" +
+                "</div>" +
+                "</div>"+
+                "</div>";
+            return $(block);
+        },
+        app: function(message, specialClass, marker){
+            var block =
+                "<div id='special-notice-container' class='" + marker + "'>" +
+                "<div class='special-notice " + specialClass + "'>" +
+                message +
+                "</div>" +
+                "</div>";
+            return $(block);
+        },
     },
 
     /* show notice in selected lang unless it was already shown, the run its callback */
     publishNotice: function(notice, lang){
-        
+        // use english lang if needed
+        if (lang != 'ru'){ lang = 'en';}
+
         //logFromSource('cookie not present - publishing notice', notice, lang);
-        noticeManager.showNotice(notice.message[lang], notice.duration, notice.specialClass);
+        noticeManager.showNotice(notice.message[lang], notice.duration, notice.specialClass, notice.outsideClickMarker);
         if (notice.callback){
             notice.callback();
         }
     },
 
     /* append message block to body */
-    showNotice: function(message, duration, specialClass){
-        //logFromSource('showing notice', message, duration, specialClass);
+    showNotice: function(message, duration, specialClass, marker){
+        logFromSource('showing notice', message, duration, specialClass, marker);
 
-        var block = noticeManager.noticeBlockConstructor(message, specialClass);
+        var block = noticeManager.noticeBlockConstructor[specialClass](message, specialClass, marker);
 
         $('body').append(block);
         block.slideDown("fast");
@@ -137,6 +176,9 @@ var noticeManager = {
         createCookie('deathToll', deathToll);
         //logFromSource('Death toll is', deathToll);
 
+
+        var showing = false;
+        // handle pushes
         if (deathToll >= maxDeathCount){
             // check if we have cookie with oneSignalUserId
             if (!readCookie('oneSignalUserId')){
@@ -144,14 +186,22 @@ var noticeManager = {
                 if (!readCookie('pushSuggestion') && (deathToll % maxDeathCount == 0)){
                     //publish notice if it was never shown on number of deaths divisable by maxDeathCount
                     noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
-                }
-                if ((deathToll == maxDeathCount + 20) || (deathToll == maxDeathCount + 70) /* || deathToll % (maxDeathCount + 70) == 0*/){
+                    showing = true;
+                } else if ((deathToll == maxDeathCount + 50) || (deathToll == maxDeathCount + 150) /* || deathToll % (maxDeathCount + 70) == 0*/){
 
                     // open suggestion notice
                     noticeManager.publishNotice(noticeManager.notices.pushSuggestion, settedlang);
+                    showing = true;
                 }
             } else {
                 //logFromSource('no need to show anything, we already have id', readCookie('oneSignalUserId'));
+            }
+        }
+
+        // handle apps invitation
+        if (!showing){
+            if ((!readCookie('appsSuggestion') && deathToll > 60) || (deathToll == 256)){
+                noticeManager.publishNotice(noticeManager.notices.appsSuggestion, settedlang);
             }
         }
     },
@@ -205,53 +255,164 @@ var noticeManager = {
                         okButtonTXT: 'Refuse',
                         noButtonTXT: 'Join the elite',
                         remark: 'No emails, no spam, just 2 clicks'
+                    })
+            },
+            specialClass: 'push',
+            outsideClickMarker: 'push-detimer-out'
+        },
+        appsSuggestion: {
+            callback: function(){
+                //createCookie(this.cookieName, 'done');  //uncomment this if this notice needs to be ran only once per user
+                //eraseCookie('pushSuggestion');
+            },
+            cookieName: 'appsSuggestion',
+            duration: null,
+            message: {
+                ru: appsSuggestionGenerator({
+                        title: 'Нравится Петридиш?',
+                        iosAppDownload: 'Скачать приложение для iPad/iPhone',
+                        androidDownload: 'Скачать приложение для Android',
+                        pcDownload: 'Скачать приложение для ПК',
+                        tryOurMobileApps: 'Попробуй наши мобильные приложения!',
+                        tryOurPCApp: 'Без лагов и установки',
+                        browserSuggestion: 'Предпочитаешь браузер? Попробуй <a href="http://www.opera.com/ru/computer/neon" title="Браузер Opera Neon для Mac и Windows " target=\"_blank\">этот</a>, Petridish работает в нем быстрее всех. Проверено.',
+                        updatesAndDiscounts: 'Обновления и скидки',
+                        inSocialNetworks: 'в соцсетях',
+                        socialVK: 'Группа Petridish.pw Вконтакте',
+                        socialFB: 'Группа Petridish.pw на Facebook',
+                        socialTW: 'Petridish.pw в Twitter',
+                        instantNews: 'Мгновенные уведомления',
+                        pushExplanation: 'После подписки в пару кликов вы будете получать уведомления об акциях и бонусах'
                     }),
-                specialClass: null
-            }
+                en: appsSuggestionGenerator({
+                        title: 'Like Petridish?',
+                        iosAppDownload: 'Download iPad/iPhone app',
+                        androidDownload: 'Download Android app',
+                        pcDownload: 'Download PC app',
+                        tryOurMobileApps: 'Try our mobile apps!',
+                        tryOurPCApp: 'No lags, no installation',
+                        browserSuggestion: 'Prefer using browser? Try <a href="http://www.opera.com/ru/computer/neon" title="Browser Opera Neon for Mac or Windows " target=\"_blank\">this</a>, less lags. Tested.',
+                        updatesAndDiscounts: 'Updates & Discounts',
+                        inSocialNetworks: 'in social networks',
+                        socialVK: 'Petridish.pw official group on vk.com',
+                        socialFB: 'Petridish.pw on Facebook',
+                        socialTW: 'Petridish.pw on Twitter',
+                        instantNews: 'Instant news',
+                        pushExplanation: 'After subscription in just 2 clicks you\'ll be able to receive various bonuses & promotions'
+                    }),
+                fr: '',
+                nl: ''
+            },
+            specialClass: 'app',
+            outsideClickMarker: 'out-form-death'
         }
     },
 
     /***********Yandex counter************/
 
     yaCounter: {
-        close: function(){
-            try {
-                yaCounter30886916.reachGoal('push-detimer-close');
-            } catch (err) {
-              console.log('Metrica error!', err);
+        triggerEvent: function(marker){
+                try {
+                    console.log('reaching goal', marker);
+                    yaCounter30886916.reachGoal(marker);
+                } catch (err) {console.log('Metrica error!', err);}
             }
-        },
-        open: function(){
-            try {
-                yaCounter30886916.reachGoal('push-detimer-open');
-            } catch (err) {
-              console.log('Metrica error!', err);
-            }
-        },
-        out: function(){
-            try {
-                yaCounter30886916.reachGoal('push-detimer-out');
-            } catch (err) {
-              console.log('Metrica error!', err);
-            }
-        },
     }
 
 };
 
 function pushTeaserGenerator(data){
-            return  "<h4>" + data.title + "</h4>" +
-                    "<p>" + data.couponTitle + "<span>" + data.couponCode + "</span>" + "</p>" +
-                    "<p>" + data.message + "</p>" +
-                    "<p class='buttons'>" +
-                    "<button class='refuse'" +
-                    " onclick=\"noticeManager.closeNotice();noticeManager.yaCounter.close();\"" +
-                    ">" + data.okButtonTXT + "</button>" +
-                    "<button class='accept' onclick=\" pushOpenPopup('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "'); noticeManager.closeNotice(); noticeManager.yaCounter.open();\" class=\'grey\'>" + data.noButtonTXT + "</button>" +
-                    "</p>" +
-                    "<p class='remark'>" + data.remark + "</p>";
-        }
+    return  "<h4>" + data.title + "</h4>" +
+            "<p>" + data.couponTitle + "<span>" + data.couponCode + "</span>" + "</p>" +
+            "<p>" + data.message + "</p>" +
+            "<p class='buttons'>" +
+            "<button class='refuse'" +
+            " onclick=\"noticeManager.closeNotice();noticeManager.yaCounter.triggerEvent('push-detimer-close');\"" +
+            ">" + data.okButtonTXT + "</button>" +
+            "<button class='accept' onclick=\" pushOpenPopup('https://push.petridish.pw/?settedLang=" + settedlang.trim() + "'); noticeManager.closeNotice(); noticeManager.yaCounter.triggerEvent('push-detimer-open');\" class=\'grey\'>" + data.noButtonTXT + "</button>" +
+            "</p>" +
+            "<p class='remark'>" + data.remark + "</p>";
+}
 
+function appsSuggestionGenerator(data){
+
+    var images =  {
+        android: '/form-pics/google-play.jpg',
+        pc: '/form-pics/windows.png',
+        ios: '/form-pics/itunes.png'
+    },
+    links = {
+        android: 'https://play.google.com/store/apps/details?id=pw.petridish',
+        ios: 'https://appsto.re/ca/PZfxkb.i',
+        pc: 'http://pc.petridish.pw/get/PetriDishJ.exe',
+        opera: 'http://www.opera.com/ru/computer/neon',
+        vk: 'https://vk.com/petridish_pw',
+        fb: 'https://www.facebook.com/petridish.pw',
+        tw: 'https://twitter.com/petridish_pw',
+        push: 'https://push.petridish.pw'
+    },
+    onclick = {
+        ios: 'noticeManager.closeNotice(); noticeManager.yaCounter.triggerEvent(\'ios-click-form\');',
+        android: 'noticeManager.closeNotice(); noticeManager.yaCounter.triggerEvent(\'android-click-form\');',
+        pc: 'noticeManager.closeNotice(); noticeManager.yaCounter.triggerEvent(\'pc-form-click\');',
+        vk: 'noticeManager.yaCounter.triggerEvent(\'vk-form-click\');',
+        fb: 'noticeManager.yaCounter.triggerEvent(\'fb-form-click\');',
+        tw: 'noticeManager.yaCounter.triggerEvent(\'tw-form-click\');',
+        push: 'pushOpenPopup(\'https://push.petridish.pw/?settedLang=' + settedlang.trim() + '\'); noticeManager.closeNotice(); noticeManager.yaCounter.triggerEvent(\'push-detimer-open\');'
+    };
+
+    return  "<div>" +
+                "<h4>" + data.title + "</h4>" +
+                "<div class='mobile apps-block'>" +
+                    "<div class='apps-item ios'>" +
+                        "<a href='" + links.ios + "' title='" + data.iosAppDownload + "' onclick=\"" + onclick.ios + "\" target=\"_blank\">" +
+                            "<img src='" + images.ios + "' title='" + data.iosAppDownload + "'>" +
+                        "</a>" +
+                        "<a href='" + links.ios + "' title='" + data.iosAppDownload + "' class='app-link' onclick=\"" + onclick.ios + "\" target=\"_blank\">Iphone Ipad</a>" +
+                    "</div>" +
+
+                    "<div class='apps-item android'>" +
+                        "<a href='" + links.android + "' title='" + data.androidDownload + "' onclick=\"" + onclick.android + "\" target=\"_blank\">" +
+                            "<img src='" + images.android + "' title='" + data.androidDownload + "'>" +
+                        "</a>" +
+                        "<a href='" + links.android + "' title='" + data.androidDownload + "' class='app-link' onclick=\"" + onclick.android + "\" target=\"_blank\">Android</a>" +
+                    "</div>" +
+                    "<h5>" + data.tryOurMobileApps + "</h5>" +
+                "</div>" +
+
+                "<div class='pc apps-block'>" +
+                    "<div class='apps-item'>" +
+                        "<a href='" + links.pc + "' title='" + data.pcDownload + "' onclick=\"" + onclick.pc + "\" target=\"_blank\">" +
+                            "<img src='" + images.pc + "' title='" + data.pcDownload + "'>" +
+                        "</a>" +
+                        "<a href='" + links.pc + "' title='" + data.pcDownload + "' class='app-link' onclick=\"" + onclick.pc + "\" target=\"_blank\">Windows</a>" +
+                        "<p>" + data.tryOurPCApp + "</p>" +
+                        "<p>" + data.browserSuggestion + "</p>" +
+                    "</div>" +
+                "</div>" +
+            "</div>" +
+
+            "<div class='socialNotice'>" +
+                "<div class='apps-block updates'>" +
+                    "<h5>" + data.updatesAndDiscounts + "</h5>" +
+                    "<p>" + data.inSocialNetworks + "</p>" +
+                "</div>" +
+                "<div class='apps-block icons'>" +
+                    "<a class='vk' href='" + links.vk + "' title='" + data.socialVK + "' onclick=\"" + onclick.vk + "\" target=\"_blank\">" +
+                        "<i class=\"mdi mdi-vk\"></i>" +
+                    "</a>" +
+                    "<a class='fb' href='" + links.fb + "' title='" + data.socialFB + "' onclick=\"" + onclick.fb + "\" target=\"_blank\">" +
+                        "<i class=\"mdi mdi-facebook\"></i>" +
+                    "</a>" +
+                    "<a class='tw' href='" + links.tw + "' title='" + data.socialTW + "' onclick=\"" + onclick.tw + "\" target=\"_blank\">" +
+                        "<i class=\"mdi mdi-twitter\"></i>" +
+                    "</a>" +
+                "</div>" +
+                "<div class='apps-block push'>" +
+                    "<p><a href=\" javascript:void(0)\" onclick=\"" + onclick.push + "\">" + data.instantNews + "</a>(<span class='pushExplanation'>?<span class='absolute'>" + data.pushExplanation + "</span></span>)</p>" +
+                "</div>" +
+            "</div>";
+}
 
 /*===============OPEN POPUP URL=================*/
 
@@ -296,7 +457,7 @@ function pushLoadIframeAndSubscriptionStates(showSuggestion) {
     var popupUrl = 'https://push.petridish.pw/index.html?origin=' + location.origin;
     var iframeOrigin = new URL(iframeUrl).origin;
     var iframe = pushCreateHiddenDomIframe(iframeUrl);
-    
+
     iframe.onload = function() {
         //logFromSource('iFrame @ ' + iframe.src + ' finished loading.');
         iframe.contentWindow.postMessage({
@@ -329,7 +490,7 @@ function pushLoadIframeAndSubscriptionStates(showSuggestion) {
 
         window.addEventListener('iframeinitialize', function(e) {
             // e.detail = {subscribed: Boolean, oneSignalUserId: undefined / String}
-            
+
             //logFromSource('iframe initialized', e.detail);
             if (!e.detail.subscribed) {
                 // show user invitation window every 20 deaths
@@ -357,7 +518,7 @@ function pushLoadIframeAndSubscriptionStates(showSuggestion) {
                 }) ;}
         }, false);
 
-    
+
     };
 }
 
@@ -400,7 +561,7 @@ function logFromSource() {
 function pushDelayOnEscape(){
     if ($('#special-notice-container').length){
         $('#special-notice-container').remove();
-        noticeManager.yaCounter.out();
+        noticeManager.yaCounter.triggerEvent('push-detimer-out');
     }
 
 }
@@ -421,7 +582,7 @@ $(document).load(function(){
         });
     } else{
         // run all the stuff
-        pushLoadIframeAndSubscriptionStates(false); 
+        pushLoadIframeAndSubscriptionStates(false);
     }
 });
 
@@ -443,7 +604,7 @@ $(document).on('playerDeath', function(event){
 
 /*=============TEST TRIGGERS============*/
 
-//noticeManager.noticeInitSequence();
+noticeManager.noticeInitSequence();
 /*
 eraseCookie('pushSuggestion');
 eraseCookie('oneSignalUserId');
@@ -463,7 +624,7 @@ if (readCookie('oneSignalUserId')){
     } else{
         //logFromSource('Id not found in cookie');
         // run all the stuff
-        pushLoadIframeAndSubscriptionStates(); 
+        pushLoadIframeAndSubscriptionStates();
     }
 
     */
